@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anatomy for ChatGPT | Tablet Press Explainer</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1b2f40;background:#e8edf0;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#f5f6f4 0%,#e6edf0 65%,#e0e7eb 100%);min-height:100vh}
+.app{max-width:1360px;margin:0 auto;padding:28px 24px 40px}.mast{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:800;letter-spacing:.02em}.mark{width:33px;height:33px;border-radius:9px;background:#112d3c;color:#fff;display:grid;place-items:center;font-size:21px}.eyebrow{color:#6c8190;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}.tag{border:1px solid #c8d4da;background:#ffffffb3;padding:8px 12px;border-radius:25px;font-size:12px;color:#577082;font-weight:600}
+h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.05em;margin:5px 0 6px;font-weight:800}p.lede{margin:0;color:#667c89;max-width:750px;font-size:14px;line-height:1.6}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;margin-top:26px}.panel{background:#f9fbfc;border:1px solid #cfdae0;border-radius:18px;box-shadow:0 12px 35px #1c35400d;overflow:hidden}
+.stage-top{display:flex;justify-content:space-between;padding:17px 20px 9px;align-items:center;gap:15px}.stage-num{font:750 11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#8596a0;letter-spacing:.13em}.stage-title{font-size:15px;font-weight:800}.mini-pill{border:1px solid #d4dfe3;padding:5px 9px;border-radius:5px;color:#69818d;font-size:10px;font-weight:700;white-space:nowrap}
+.scene-wrap{position:relative;margin:0 15px;background:radial-gradient(ellipse at 45% 50%,#f9fbfc 0%,#f2f7f7 70%,#edf3f5 100%);border:1px solid #e0e9e9;border-radius:12px;overflow:hidden;min-height:510px}
+svg{width:100%;height:100%;min-height:510px;display:block}svg text{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.axis{position:absolute;left:14px;bottom:13px;color:#7d929c;font-size:10px;letter-spacing:.05em}.scenecorner{position:absolute;right:15px;top:14px;color:#99a8ae;font:10px ui-monospace,monospace}
+.stage-bottom{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 19px 18px;flex-wrap:wrap}.legend{display:flex;gap:14px;flex-wrap:wrap;color:#748a95;font-size:11px}.dot{display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;vertical-align:1px}.footnote{font-size:11px;color:#738996;line-height:1.5;max-width:310px}
+.controls{padding:21px;display:flex;flex-direction:column;gap:18px}.ctrl-title{font-size:11px;font-weight:850;color:#8295a0;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}.phase-name{font-size:27px;font-weight:800;letter-spacing:-.04em;line-height:1.15;margin:0}.phase-desc{font-size:12px;color:#677f8b;line-height:1.65;min-height:62px;margin-top:8px}.strip{border-top:1px solid #e1e9ec;padding-top:18px}
+.status-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:8px}.value{color:#077987;font-weight:800;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:#008f9f;cursor:pointer}.ticks{display:flex;justify-content:space-between;color:#9aabb3;font:10px ui-monospace,monospace}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}button{appearance:none;border:1px solid #d1dee2;border-radius:9px;padding:11px 10px;background:white;color:#345161;font-weight:750;cursor:pointer;font-size:12px}button:focus-visible,input:focus-visible{outline:3px solid #6bc9d2;outline-offset:2px}button:hover{background:#f0f7f7}button.primary{background:#113747;color:white;border-color:#113747}button.primary:hover{background:#1a5365}button.is-on{border-color:#0a8190;background:#dff2f3;color:#075b64}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{background:#f0f5f6;border-radius:9px;padding:12px 11px;border:1px solid #e3eaed}.metric strong{font-size:16px;display:block;font-variant-numeric:tabular-nums}.metric small{font-size:10px;color:#758b97;display:block;margin-top:5px}.statebar{display:flex;gap:8px;margin-top:5px}.statebar i{width:20%;height:5px;background:#d7e2e5;border-radius:9px;display:block}.statebar i.active{background:#0f93a0}
+.callout{background:#f1f6f6;border-left:3px solid #15a0aa;padding:10px 12px;border-radius:4px;font-size:11px;color:#647c87;line-height:1.6}
+.footer{font-size:11px;color:#778d99;margin-top:14px;line-height:1.5}.footer a{color:#2b6976}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:1fr 1fr}.strip{border:0;padding:0}}@media(max-width:600px){.app{padding:14px}.controls{display:flex}.scene-wrap{margin:0 8px;min-height:340px}svg{min-height:340px}.stage-top{padding:12px}.stage-bottom{padding:12px}.stage-title{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head><body>
+<main class="app">
+<header class="mast"><div class="brand"><span class="mark">⌘</span><span>ANATOMY <span style="font-weight:450;color:#76909e">/ for ChatGPT</span></span></div><div class="tag">Independent prototype · self-contained HTML</div></header>
+<div class="eyebrow">Interactive engineering explainer / 01</div><h1>Inside a tablet press</h1><p class="lede">A simplified single-station compression cycle. Explore how the upper punch, lower punch, die cavity, and tablet move together through filling, compression, withdrawal, and ejection.</p>
+<div class="layout">
+<section class="panel" aria-label="Animated machine visualization"><div class="stage-top"><div><div class="stage-num">FIG 001 / MACHINE ANATOMY</div><div class="stage-title">Compression assembly · isometric cutaway</div></div><div class="mini-pill">SCHEMATIC / NOT TO SCALE</div></div>
+<div class="scene-wrap"><svg id="scene" viewBox="0 0 820 600" role="img" aria-label="Animated isometric tablet press with a die plate, descending upper punch, rising lower punch, and an ejected tablet"><defs>
+<filter id="shadow"><feGaussianBlur stdDeviation="7"/></filter><filter id="soft"><feGaussianBlur stdDeviation="1.5"/></filter>
+<linearGradient id="metal" x1="0" x2="1"><stop stop-color="#849ea9"/><stop offset=".45" stop-color="#dae8ed"/><stop offset="1" stop-color="#89a3ad"/></linearGradient>
+<linearGradient id="hopperG" x1="0" x2="1"><stop stop-color="#81aab1"/><stop offset=".55" stop-color="#d6e9e8"/><stop offset="1" stop-color="#739da8"/></linearGradient>
+</defs>
+<g id="grid"></g><g id="rear"></g><g id="platform"></g><g id="equipment"></g><g id="live-back"></g><g id="live"></g><g id="live-front"></g><g id="frame-front"></g><g id="annotations"></g></svg>
+<div class="axis">X / Y / Z · ISOMETRIC 45°</div><div class="scenecorner">ONE-STATION SYSTEM</div></div>
+<div class="stage-bottom"><div class="legend"><span><i class="dot" style="background:#4f8596"></i>Structural frame</span><span><i class="dot" style="background:#0999a7"></i>Moving tooling</span><span><i class="dot" style="background:#d7a85b"></i>Tablet / blend</span></div><div class="footnote">Educational motion study. Geometry and timings are illustrative, not equipment operating parameters.</div></div></section>
+<aside class="panel controls" aria-label="Animation controls">
+<div><div class="ctrl-title">Machine state</div><h2 id="phase" class="phase-name">Filling</h2><div id="description" class="phase-desc">Powder enters the die while the lower punch defines the fill volume.</div><div id="phases" class="statebar" aria-label="Cycle stages"></div></div>
+<div class="strip"><div class="ctrl-title">Cycle timeline</div><div class="status-row"><label for="timeline">Scrub operating cycle</label><span class="value" id="pct">0%</span></div><input id="timeline" type="range" min="0" max="1000" value="0" step="1" aria-label="Cycle position"><div class="ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><div class="btnrow" style="margin-top:16px"><button id="play" class="primary">❚❚ Pause</button><button id="restart">↺ Restart</button></div></div>
+<div class="strip"><div class="ctrl-title">View options</div><div class="btnrow"><button id="explode" aria-pressed="false">Tooling apart</button><button id="slow" aria-pressed="false">0.5× speed</button></div></div>
+<div class="strip"><div class="ctrl-title">Live readout</div><div class="info-grid"><div class="metric"><strong id="upper">190</strong><small>Upper tip Z · diagram units</small></div><div class="metric"><strong id="lower">79</strong><small>Lower tip Z · diagram units</small></div><div class="metric"><strong id="gap">111</strong><small>Tooling gap · diagram units</small></div><div class="metric"><strong id="cycle">01 / 04</strong><small>Cycle phase</small></div></div></div>
+<div class="strip"><div class="ctrl-title">What to observe</div><div class="callout" id="callout">The die plate is fixed. The two punches move relative to it. Ejection happens as the lower punch rises.</div></div>
+</aside></div>
+<div class="footer">Inspired by the open-source <a href="https://github.com/wheresryan22/anatomy">Anatomy agent skill</a> by Ryan. This original, simplified demonstration is not generated with the upstream geometry kit and does not claim mechanical design accuracy. Use the packaged project instructions to request new machines in ChatGPT.</div>
+</main>
+<script>
+(()=>{'use strict';
+const ns='http://www.w3.org/2000/svg';
+const el=(tag,attrs={},parent=null)=>{const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(parent)parent.appendChild(n);return n};
+const $=s=>document.querySelector(s); const groups={};for(const id of ['grid','rear','platform','equipment','live-back','live','live-front','frame-front','annotations'])groups[id]=document.getElementById(id);
+const P={cx:399,cy:485,s:1.40};const pr=(x,y,z)=>[P.cx+(.8660254*(x-y))*P.s,P.cy+(.5*(x+y)-z)*P.s];
+const pts=a=>a.map(p=>pr(...p).map(v=>v.toFixed(2)).join(',')).join(' ');
+const colors={steel:['#c3d4d9','#8da8b3','#6e8c99'],light:['#e2eaed','#aec2cb','#879fac'],dark:['#8aa3b0','#547585','#365c6d'],teal:['#b4f0ed','#54b9be','#177c88'],accent:['#f0d4a0','#c9a061','#a57941']};
+function poly(parent,points,fill,stroke='#58727f',sw=.65,other={}){return el('polygon',{points:pts(points),fill,stroke,'stroke-width':sw,'stroke-linejoin':'round',...other},parent)}
+function ln(parent,a,b,stroke='#6d8995',w=1,extra={}){const [x1,y1]=pr(...a),[x2,y2]=pr(...b);return el('line',{x1,y1,x2,y2,stroke,'stroke-width':w,'stroke-linecap':'round',...extra},parent)}
+function box(parent,x,y,z,w,d,h,c='steel',opts={}){let [top,front,right]=colors[c];poly(parent,[[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+h],[x,y+d,z+h]],front);poly(parent,[[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+h],[x+w,y,z+h]],right);poly(parent,[[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]],top);if(opts.details){for(let i=1;i<opts.details;i++){ln(parent,[x+w*i/opts.details,y+d,z+h-1],[x+w*i/opts.details,y+d,z+1],'#6a8791',.5)}}}
+function circ(parent,cx,cy,z,r,fill='none',stroke='#5a7380',sw=1,steps=42){const points=[];for(let k=0;k<steps;k++){const t=(2*Math.PI*k)/steps;points.push([cx+r*Math.cos(t),cy+r*Math.sin(t),z]);}return poly(parent,points,fill,stroke,sw)}
+function cyl(parent,cx,cy,r,z,h,c='steel',rim=true){const n=44;const side=[];for(let i=0;i<=n/2;i++){let t=Math.PI*2*(i/n)-Math.PI/4;side.push([cx+r*Math.cos(t),cy+r*Math.sin(t),z+h])}for(let i=n/2;i>=0;i--){let t=Math.PI*2*(i/n)-Math.PI/4;side.push([cx+r*Math.cos(t),cy+r*Math.sin(t),z])}poly(parent,side,colors[c][1],'#587481',.55);circ(parent,cx,cy,z+h,r,colors[c][0],'#5c7e8a',.8);if(rim)circ(parent,cx,cy,z+h+.4,r*.79,'none','#8dabb4',.8);return parent}
+function dot3(parent,x,y,z,rad=1,fill='#587584'){let [cx,cy]=pr(x,y,z);return el('circle',{cx,cy,r:rad,fill},parent)}
+function label(parent,title,sub,anchor,dx,dy){const [x,y]=pr(...anchor);ln(parent,anchor,[anchor[0]+dx/3,anchor[1]+dy/3,anchor[2]],'#9db1b9',.7);let X=x+dx,Y=y+dy;el('line',{x1:x,y1:y,x2:X,y2:Y,stroke:'#9bafb8','stroke-width':.8},parent);el('circle',{cx:x,cy:y,r:2.5,fill:'#098b97'},parent);el('text',{x:X+(dx>0?6:-6),y:Y-2,'text-anchor':dx>0?'start':'end',fill:'#436271','font-size':10,'font-weight':700,'letter-spacing':'.04em'},parent).textContent=title.toUpperCase();el('text',{x:X+(dx>0?6:-6),y:Y+12,'text-anchor':dx>0?'start':'end',fill:'#8ca2ab','font-size':9},parent).textContent=sub;}
+// Floor calibration grid
+for(let x=-135;x<=135;x+=20)ln(groups.grid,[x,-115,-23],[x,115,-23],'#d9e5e9',.7);
+for(let y=-115;y<=115;y+=20)ln(groups.grid,[-135,y,-23],[135,y,-23],'#d9e5e9',.7);
+const shadow=el('ellipse',{cx:400,cy:530,rx:240,ry:48,fill:'#5b7786',opacity:.14,filter:'url(#shadow)'},groups.grid);
+// Rear structure and feet
+for(let x of [-101,98])for(let y of [-74,62]){cyl(groups.rear,x,y,7,-22,7,'dark');cyl(groups.rear,x,y,4,-15,5,'dark')}
+box(groups.platform,-115,-85,-10,230,165,17,'dark');box(groups.platform,-106,-76,7,212,147,7,'steel');
+for(let x of [-97,94])for(let y of [-64,56]){cyl(groups.rear,x,y,6,14,185,'dark',false);cyl(groups.rear,x,y,7.5,180,8,'steel');cyl(groups.rear,x,y,9.2,17,3,'light')}
+// Rear motor and control housing
+box(groups.equipment,-92,-30,20,46,49,47,'steel');box(groups.equipment,-86,-27,67,34,42,8,'light');
+for(let i=0;i<5;i++)ln(groups.equipment,[-88,-27+i*8,31],[-88,-27+i*8,54],'#5b7e89',1.1);
+cyl(groups.equipment,-69,-5,9,75,8,'dark');
+// Die table and guide stage
+box(groups.equipment,-76,-69,80,158,138,10,'dark');box(groups.equipment,-69,-63,90,143,128,10,'steel');
+for(let i=0;i<13;i++){const x=-61+i*10;ln(groups.equipment,[x,61,99.9],[x,54,99.9],'#809ea8',.8)}
+for(let x of [-58,64])for(let y of [-50,49]){circ(groups.equipment,x,y,100.5,2.2,'#436779','#adc8d0',.6);dot3(groups.equipment,x,y,100.8,.7,'#eaf3f5')}
+// die rim: drawn with annuli, visible opening
+cyl(groups.equipment,17,-2,23,98,4,'dark');circ(groups.equipment,17,-2,102.4,16,'#2a5565','#b8d3d8',1.3);circ(groups.equipment,17,-2,102.5,11,'#1b3e4f','#648e99',1);
+// Secondary feeder: chute and funnel left
+box(groups.equipment,-87,-62,104,37,42,10,'steel');box(groups.equipment,-90,-63,114,40,45,2,'light');
+for(const x of [-83,-54]){cyl(groups.equipment,x,-38,3,116,38,'steel')}
+// tapered hopper around z 155..190
+const hopperBottom=[[-97,-55,150],[-50,-55,150],[-50,-14,150],[-97,-14,150]];
+const hopperTop=[[-117,-69,183],[-40,-69,183],[-40,-1,183],[-117,-1,183]];
+poly(groups.equipment,[hopperBottom[3],hopperBottom[2],hopperTop[2],hopperTop[3]],'#78a3ad');poly(groups.equipment,[hopperBottom[1],hopperBottom[2],hopperTop[2],hopperTop[1]],'#568a97');poly(groups.equipment,hopperTop,'#c5dfe1');
+box(groups.equipment,-117,-69,182,77,68,5,'light');
+for(let i=0;i<7;i++){ln(groups.equipment,[-105+i*8,-70,187],[-105+i*8,-62,187],'#8daab3',.6)}
+// ejection chute to right
+box(groups.equipment,54,29,69,51,30,9,'steel');box(groups.equipment,55,29,78,52,3,6,'dark');box(groups.equipment,55,54,78,52,3,6,'dark');
+for(let i=0;i<8;i++)ln(groups.equipment,[62+i*5,34,78],[62+i*5,51,78],'#6e98a4',.6);
+// Head beam and guide
+box(groups.equipment,-108,-76,205,213,20,16,'dark');box(groups.equipment,-108,52,205,213,20,16,'dark');box(groups.equipment,-108,-56,205,20,108,16,'steel');box(groups.equipment,85,-56,205,20,108,16,'steel');
+cyl(groups.equipment,17,-2,23,195,22,'steel');circ(groups.equipment,17,-2,222,19,'#d0e0e4','#607d8a',1);
+for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){dot3(groups.equipment,17+17*Math.cos(a),-2+17*Math.sin(a),222.5,1.6,'#658999')}
+for(let x of [-80,80]){box(groups.equipment,x,-76,225,18,12,10,'steel')}
+// Front structural feet and annotation overlays
+for(let x of [-101,98]){cyl(groups['frame-front'],x,62,6,14,185,'steel',false);cyl(groups['frame-front'],x,62,8.5,18,3,'dark');cyl(groups['frame-front'],x,62,8,196,5,'dark')}
+// Faceplate and hardware for details
+box(groups['frame-front'],-99,68,89,37,10,15,'steel');for(let i=0;i<4;i++){dot3(groups['frame-front'],-94+i*9,79,98,.9,'#517281')}
+// Dynamic animated geometry groups
+const upperGroup=groups.live;const lowerGroup=groups['live-back'];const frontGroup=groups['live-front'];
+const models=[{phase:'Filling',desc:'A feeder sweeps powder over the die cavity. The lower punch position determines the amount of powder inside.',hint:'At fill, the lower punch is recessed below the die opening and the upper punch is raised.'},{phase:'Compression',desc:'The upper punch descends toward the lower punch, reducing the powder bed to a compacted tablet.',hint:'Both punches establish the die cavity height. Compression force is not calculated in this schematic.'},{phase:'Withdrawal',desc:'The upper punch retracts, leaving the compacted tablet inside the die before ejection.',hint:'Watch the tooling gap increase as the upper punch returns to its raised position.'},{phase:'Ejection',desc:'The lower punch rises until the tablet reaches the die table, ready to be removed.',hint:'The ejected tablet is now above the die opening; the next cycle resets the lower punch.'}];
+let progress=0,playing=true,rate=1,exploded=false,last=0,raf=0;
+const lerp=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
+function state(t){let upper=145,lower=78,stage=0;
+ if(t<.25){stage=0;lower=78;upper=145}
+ else if(t<.48){stage=1;const u=(t-.25)/.23;upper=lerp(145,101,(1-Math.cos(u*Math.PI))/2);lower=lerp(78,91,u)}
+ else if(t<.68){stage=2;let u=(t-.48)/.20;upper=lerp(101,145,(1-Math.cos(u*Math.PI))/2);lower=91}
+ else if(t<.87){stage=3;let u=(t-.68)/.19;upper=145;lower=lerp(91,112,(1-Math.cos(u*Math.PI))/2)}
+ else{stage=3;let u=(t-.87)/.13;upper=145;lower=lerp(112,78,u)}
+ return {upper,lower,stage};}
+function clear(g){while(g.lastChild)g.removeChild(g.lastChild)}
+function draw(){const st=state(progress);for(const g of [upperGroup,lowerGroup,frontGroup])clear(g);
+ // Lower shaft and its threaded insert
+ const shift=exploded? -26:0;
+ cyl(lowerGroup,17+shift,-2,8,st.lower-60,60,'teal');cyl(lowerGroup,17+shift,-2,13,st.lower-9,6,'steel');cyl(lowerGroup,17+shift,-2,11,st.lower-3,3,'teal');
+ for(let k=0;k<5;k++){const z=st.lower-56+k*7;if(z<st.lower-8){circ(lowerGroup,17+shift,-2,z,8.1,'none','#8bc5c8',.5)}}
+ // Powder / tablet: material is always on top of lower punch
+ const fill=progress<.25,compact=progress>=.48;const tabletH=fill?23:progress<.48?lerp(23,7,(progress-.25)/.23):7;
+ const release=progress>=.87;const ejectT=release?(progress-.87)/.13:0;
+ const tabletX=17+shift+(release?83*ejectT:0), tabletY=release?-2+47*ejectT:-2;
+ const tabletZ=release?lerp(st.lower+2,80,ejectT):st.lower+2;
+ cyl(frontGroup,tabletX,tabletY,10,tabletZ,tabletH,'accent');circ(frontGroup,tabletX,tabletY,tabletZ+tabletH,9,'#ecd4a8','#b38b51',.7);
+ // upper punch and spindle;  tip is bottom, shaft moves with it
+ let ux=17+(exploded?40:0);cyl(upperGroup,ux,-2,8,st.upper,58,'teal');cyl(upperGroup,ux,-2,13,st.upper+13,8,'steel');cyl(upperGroup,ux,-2,14,st.upper+42,6,'steel');cyl(upperGroup,ux,-2,11,st.upper,5,'light');
+ for(let k=0;k<5;k++){circ(upperGroup,ux,-2,st.upper+26+k*5,8,'none','#a0dadb',.65)}
+ // arrows & readouts in machine
+ const tip=pr(ux,-2,st.upper);const a=el('g',{},frontGroup);el('circle',{cx:tip[0],cy:tip[1],r:3.5,fill:'#fff',stroke:'#089caa','stroke-width':1.7},a);
+ $('#upper').textContent=Math.round(st.upper);$('#lower').textContent=Math.round(st.lower);$('#gap').textContent=Math.max(0,Math.round(st.upper-st.lower));$('#phase').textContent=models[st.stage].phase;$('#description').textContent=models[st.stage].desc;$('#callout').textContent=models[st.stage].hint;$('#cycle').textContent=String(st.stage+1).padStart(2,'0')+' / 04';$('#pct').textContent=Math.round(progress*100)+'%';$('#timeline').value=Math.round(progress*1000);
+ $('#phases').innerHTML=models.map((_,i)=>`<i class="${i===st.stage?'active':''}"></i>`).join('');
+ }
+label(groups.annotations,'Upper punch','Moving tooling',[17,-2,155],73,-52);
+label(groups.annotations,'Die cavity','Fixed plate',[33,5,104],86,28);
+label(groups.annotations,'Feeder','Powder inlet',[-81,-24,185],-92,-32);
+label(groups.annotations,'Lower punch','Ejector',[16,-2,65],-122,45);
+label(groups.annotations,'Discharge','Chute',[105,45,79],62,47);
+const play=$('#play');function setPlay(v){playing=v;play.textContent=v?'❚❚ Pause':'▶ Play';}
+play.addEventListener('click',()=>{setPlay(!playing);last=0});$('#restart').addEventListener('click',()=>{progress=0;setPlay(true);last=0;draw()});
+$('#timeline').addEventListener('input',e=>{progress=Number(e.target.value)/1000;setPlay(false);draw()});
+$('#slow').addEventListener('click',e=>{rate=rate===1?.5:1;e.currentTarget.textContent=rate===1?'0.5× speed':'1× speed';e.currentTarget.setAttribute('aria-pressed',rate!==1);e.currentTarget.classList.toggle('is-on',rate!==1)});
+$('#explode').addEventListener('click',e=>{exploded=!exploded;e.currentTarget.classList.toggle('is-on',exploded);e.currentTarget.setAttribute('aria-pressed',exploded);draw()});
+let reduce=matchMedia('(prefers-reduced-motion: reduce)');if(reduce.matches)setPlay(false);draw();
+function tick(ts){if(!last)last=ts;const dt=Math.min(.05,(ts-last)/1000);last=ts;if(playing&&!document.hidden&&!reduce.matches){progress=(progress+dt*rate/12)%1;draw()}raf=requestAnimationFrame(tick)}raf=requestAnimationFrame(tick);
+})();
+</script></body></html>
