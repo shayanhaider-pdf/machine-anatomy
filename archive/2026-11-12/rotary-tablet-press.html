@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rotary tablet press | Pharmaceutical manufacturing</title>
+<style>:root {
+  color-scheme: light;
+  font-family: Inter, Geist, "Segoe UI", sans-serif;
+  --ink:#142434; --text:#304556; --quiet:#526473; --line:#d7e0e5;
+  --green:#086752; --pale:#e0f3eb; --board:#0b1826;
+  background:#f2f5f5; color:var(--ink);
+}
+* { box-sizing:border-box }
+body { margin:0 }
+button, select, input { font:inherit }
+button { cursor:pointer; touch-action:manipulation }
+button:focus-visible, input:focus-visible, select:focus-visible, svg:focus-visible, a:focus-visible {
+  outline:3px solid #55b8a3; outline-offset:3px;
+}
+.explorer { max-width:1230px; margin:0 auto; padding:34px clamp(13px,3.4vw,44px) 24px }
+.page-head { margin-bottom:24px }
+.collection { display:flex; align-items:center; gap:8px; margin-bottom:10px; color:var(--green); font-size:12px; font-weight:720; letter-spacing:.055em }
+.collection svg { flex:none }
+h1 { font-size:clamp(30px,5vw,50px); line-height:1.03; letter-spacing:-.052em; margin:0 0 8px; font-weight:720 }
+.page-head p { color:var(--text); margin:0; line-height:1.48; font-size:15px; max-width:74ch }
+.workspace { display:grid; grid-template-columns:minmax(0,1fr) minmax(235px,27%); gap:12px 16px; align-items:start }
+.drawing {
+  grid-column:1; grid-row:1; margin:0; overflow:hidden; position:relative; border-radius:14px;
+  background:radial-gradient(ellipse at 56% 38%,#1d3344 0%,#101f2f 52%,#0a1623 100%);
+  box-shadow:0 5px 18px #122b3a1e; border:1px solid #243c4d;
+}
+.view-toolbar { position:absolute; z-index:1; inset:10px 10px auto; display:flex; justify-content:flex-start; align-items:center; flex-wrap:wrap; gap:6px }
+.segmented { display:flex; padding:3px; gap:2px; background:#102233f0; border:1px solid #395467; border-radius:8px }
+.segmented button { color:#c8dbe4; border:0; font-size:12px; line-height:1.1; font-weight:660; padding:7px 9px; border-radius:5px; background:transparent }
+.segmented button[aria-pressed="true"] { background:#bfead9; color:#102f29 }
+.segmented button[aria-pressed="false"]:hover { background:#233f54; color:#fff }
+.view-tools { margin-left:auto; display:flex; gap:3px }
+.view-tools button { color:#e1edf1; background:#102233f0; border:1px solid #3c5568; font-size:16px; width:29px; height:30px; padding:0; border-radius:6px; line-height:1 }
+.view-tools button:hover { background:#263f54 }
+#stage { display:block; width:100%; height:auto; touch-action:pan-y; cursor:grab; user-select:none }
+#stage.dragging { cursor:grabbing }
+#stage [data-part] { cursor:pointer }
+#stage.dragging [data-part] { cursor:grabbing }
+figcaption {
+  display:flex; align-items:center; justify-content:space-between; gap:6px 12px; flex-wrap:wrap; margin-top:-6px; position:relative;
+  font-size:11px; line-height:1.2; letter-spacing:.015em; color:#b0c6d1; padding:0 12px 11px; pointer-events:none
+}
+figcaption span:last-child { color:#a1e3cc }
+.transport { grid-column:1; grid-row:2; min-width:0; background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px }
+.transport-row { display:flex; align-items:center; gap:10px; padding-bottom:10px; min-width:0 }
+.play { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-width:88px; color:white; background:var(--green); border:1px solid #085b4b; border-radius:7px; padding:8px 9px; font-size:13px; font-weight:700 }
+.play:hover { background:#075744 }
+#play-icon { font-size:10px; width:13px; text-align:center }
+input[type=range] { flex:1; min-width:35px; accent-color:#08745b; margin:0; cursor:ew-resize }
+#percent { text-align:right; min-width:37px; color:var(--text); font-variant-numeric:tabular-nums; font-size:12px }
+.speed { display:flex; align-items:center; gap:5px; color:var(--quiet); font-size:12px }
+.speed select { padding:6px 3px 6px 5px; background:#f8faf9; border:1px solid var(--line); border-radius:6px; color:var(--ink) }
+.phases { display:flex; gap:5px; flex-wrap:wrap }
+.phases button { padding:6px 8px; font-size:12px; line-height:1.2; font-weight:600; background:#f5f7f7; color:var(--text); border:1px solid #dce5e7; border-radius:6px }
+.phases button:hover { background:#eaf2ef }
+.phases button[aria-current="step"] { color:#085644; background:var(--pale); border-color:#91cdb8 }
+.inspector { grid-column:2; grid-row:1 / span 2; min-width:0; background:#fff; border:1px solid var(--line); border-radius:13px; padding:16px; box-shadow:0 3px 12px #142c3509 }
+.section-label { color:var(--quiet); font-size:12px; font-weight:700; letter-spacing:.012em; display:flex; gap:7px; align-items:center }
+.phase-dot { height:8px; width:8px; flex:none; background:#19856b; border-radius:50% }
+.phase-box h2 { margin:7px 0 5px; font-size:23px; letter-spacing:-.03em; line-height:1.15 }
+.phase-box p, #part-description { color:var(--text); font-size:14px; line-height:1.48; margin:0 }
+.phase-box { min-height:127px }
+.parts { padding:13px 0 12px; border-top:1px solid var(--line) }
+.parts select { display:block; width:100%; font-size:13px; color:var(--ink); margin:7px 0 8px; background:#f7faf9; border:1px solid var(--line); border-radius:6px; padding:8px 5px }
+#part-description { min-height:58px }
+.legend { display:flex; flex-wrap:wrap; gap:8px 12px; border-top:1px solid var(--line); padding-top:11px; color:var(--quiet); font-size:11px }
+.legend-item { display:inline-flex; align-items:center; gap:5px }
+.swatch { height:7px; width:7px; border-radius:2px; background:var(--swatch); border:1px solid #26383c33 }
+.replay { width:100%; margin:7px 0 12px; background:#f3f8f6; border:1px solid #b5d7ca; border-radius:7px; color:#0a634f; font-weight:670; font-size:13px; padding:7px 5px }
+.replay:hover { background:#dcefe7 }
+footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:7px 14px; margin-top:13px; font-size:11px; color:var(--quiet); line-height:1.4 }
+footer a { color:var(--green); text-underline-offset:2px }
+.notice { color:#913c31 }
+.screen-reader { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap }
+@media(max-width:735px) {
+  .explorer { padding-top:22px }
+  .workspace { display:flex; flex-direction:column; align-items:stretch; gap:9px }
+  .inspector { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px 14px }
+  .phase-box { min-height:0 }
+  .parts { border-top:0; padding:0 }
+  #part-description { min-height:0 }
+  .legend { grid-column:1/-1 }
+  .replay { grid-row:2; margin:0 }
+  .view-tools button { width:26px; height:27px }
+}
+@media(max-width:470px) {
+  .page-head { margin-bottom:13px }
+  .page-head p { font-size:13px }
+  .view-toolbar { position:relative; inset:auto; margin:7px; justify-content:flex-start }
+  .segmented button { padding:6px; font-size:11px }
+  .view-tools { gap:2px }
+  .view-tools button { width:23px; height:25px; font-size:14px }
+  .view-tools button:last-child { display:none }
+  .speed span { display:none }
+  .transport-row { gap:6px }
+  .play { min-width:70px; padding:7px 5px }
+  .phases button { font-size:11px; padding:5px 6px }
+  .inspector { padding:11px; gap:7px 11px }
+  .phase-box h2 { font-size:19px }
+  .phase-box p, #part-description { font-size:12px }
+  figcaption { margin-top:0; padding:0 8px 8px; font-size:10px }
+}
+</style>
+</head>
+<body>
+<main class="explorer">
+  <header class="page-head">
+    <div class="collection">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7zM3 7l9 5 9-5m-9 5v10m0-20v5m5 7 4 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <span>Pharmaceutical manufacturing</span>
+    </div>
+    <h1>Rotary tablet press</h1>
+    <p>A rotating turret carries matched punches and dies past fixed feeding, compression and ejection stations.</p>
+  </header>
+
+  <div class="workspace">
+    <figure class="drawing" aria-label="Rotary tablet press interactive model">
+      <div class="view-toolbar">
+        <div class="segmented" role="group" aria-label="Machine enclosure">
+          <button id="cutaway" type="button" aria-pressed="true">Cutaway</button>
+          <button id="exterior" type="button" aria-pressed="false">Exterior</button>
+        </div>
+        <div class="segmented" role="group" aria-label="Tablet press view"><button id="turret" type="button" aria-pressed="true">Turret</button><button id="detail" type="button" aria-pressed="false">Tooling</button></div>
+        <div class="view-tools" role="group" aria-label="Camera controls">
+          <button id="left" type="button" aria-label="Rotate left" title="Rotate left">↶</button>
+          <button id="right" type="button" aria-label="Rotate right" title="Rotate right">↷</button>
+          <button id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out">−</button>
+          <button id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+          <button id="reset-view" type="button" aria-label="Reset camera" title="Reset camera">⟲</button>
+        </div>
+      </div>
+      <svg id="stage" viewBox="0 0 800 510" role="img" tabindex="0" aria-label="Rotary tablet press. Drag or use the arrow keys to rotate. Click a part to inspect it.">
+        <defs>
+          <radialGradient id="shadow"><stop offset="0" stop-color="#020913" stop-opacity=".75"/><stop offset="1" stop-color="#020913" stop-opacity="0"/></radialGradient>
+        </defs>
+        <g id="ground" aria-hidden="true"></g>
+        <g id="machine" aria-hidden="true"></g>
+        <g id="callout" aria-hidden="true"></g>
+      </svg>
+      <figcaption><span id="view-note">Drag to rotate · Click a part to inspect</span><span>Tablet compression</span></figcaption>
+    </figure>
+
+    <section class="transport" aria-label="Cycle controls">
+      <div class="transport-row">
+        <button id="play" type="button" class="play"><span id="play-icon" aria-hidden="true">▶</span><span id="play-label">Play</span></button>
+        <label class="screen-reader" for="scrub">Cycle position</label>
+        <input id="scrub" type="range" min="0" max="1000" value="0" step="1" aria-label="Cycle position">
+        <output id="percent" for="scrub">0%</output>
+        <label class="speed" for="speed"><span>Speed</span><select id="speed" aria-label="Playback speed"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+      </div>
+      <nav id="phases" class="phases" aria-label="Jump to phase"></nav>
+    </section>
+
+    <aside class="inspector" aria-label="Machine inspection">
+      <div class="phase-box" aria-live="polite" aria-atomic="true">
+        <div class="section-label"><span class="phase-dot"></span> Current phase</div>
+        <h2 id="phase-title"></h2>
+        <p id="phase-description"></p>
+      </div>
+      <button class="replay" type="button" id="replay">Replay ejection</button>
+      <div class="parts">
+        <label for="part" class="section-label">Inspect a part</label>
+        <select id="part" aria-label="Inspect a part"><option value="">Select a part</option></select>
+        <div id="part-description">Select a part or click it on the cutaway to highlight it.</div>
+      </div>
+      <div id="legend" class="legend" aria-label="Model legend"></div>
+    </aside>
+  </div>
+
+  <footer><span>Illustrative model. Geometry and cycle timing are schematic.</span><a href="https://stacks.cdc.gov/view/cdc/179719/cdc_179719_DS1.pdf" target="_blank" rel="noopener noreferrer">NIOSH · Rotary tablet press compression cycle ↗</a></footer>
+  <noscript><p class="notice">Enable JavaScript in your browser to run the cutaway.</p></noscript>
+</main>
+<script>/* Anatomy geometry kit (MIT)
+MIT License
+
+Copyright (c) 2026 Ryan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+const MACHINE="press";
+
+const { cameraOf, iso, pathOf, fitProjection } = (()=>{const AZIMUTH = 45;
+const ELEVATION = 30;
+const SHADES = 4;
+const RADIANS = Math.PI / 180;
+const UNIT = Math.sqrt(1.6);
+function cameraOf({ scale, azimuth = AZIMUTH, elevation = ELEVATION }) {
+    const a = azimuth * RADIANS;
+    const e = elevation * RADIANS;
+    return { sinA: Math.sin(a), cosA: Math.cos(a), sinE: Math.sin(e), cosE: Math.cos(e), k: scale * UNIT };
+}
+function iso([x, y, z], projection) {
+    const { origin } = projection;
+    const { sinA, cosA, sinE, cosE, k } = cameraOf(projection);
+    return [origin[0] + (x * sinA - y * cosA) * k, origin[1] + ((x * cosA + y * sinA) * sinE - z * cosE) * k];
+}
+function towardViewer(projection) {
+    const { sinA, cosA } = cameraOf(projection);
+    return [cosA, sinA];
+}
+function depthOf([x, y, z], projection) {
+    const { sinA, cosA, sinE, cosE } = cameraOf(projection);
+    return (x * cosA + y * sinA) * cosE + z * sinE;
+}
+const tenth = (value) => {
+    const text = (Math.round(value * 10) / 10).toFixed(1).replace(/\.0$/, "");
+    return text === "-0" ? "0" : text;
+};
+function pathOf(points, closed = false) {
+    if (!points.length)
+        return "";
+    return points.map(([x, y], at) => `${at ? "L" : "M"}${tenth(x)} ${tenth(y)}`).join("") + (closed ? "Z" : "");
+}
+function fitProjection(points, width, height, { pad = 24, headroom = 0, azimuth = AZIMUTH, elevation = ELEVATION } = {}) {
+    const unit = { origin: [0, 0], scale: 1, azimuth, elevation };
+    const flat = points.map((point) => iso(point, unit));
+    const xs = flat.map(([x]) => x);
+    const ys = flat.map(([, y]) => y);
+    const left = Math.min(...xs);
+    const right = Math.max(...xs);
+    const up = Math.min(...ys);
+    const down = Math.max(...ys);
+    const scale = Math.min((width - pad * 2) / (right - left), (height - pad * 2 - headroom) / (down - up));
+    return {
+        origin: [width / 2 - ((left + right) / 2) * scale, headroom + (height - headroom) / 2 - ((up + down) / 2) * scale],
+        scale,
+        azimuth,
+        elevation,
+    };
+}
+
+return { cameraOf, iso, pathOf, fitProjection };})();
+const { add3, sub3, mul3, dot3, cross3, unit3, frameAlong, pointOf, radialOf } = (()=>{const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const add3 = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const sub3 = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const mul3 = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
+const len3 = (a) => Math.hypot(a[0], a[1], a[2]);
+const unit3 = (a) => {
+  const length = len3(a) || 1;
+  return [a[0] / length, a[1] / length, a[2] / length];
+};
+const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const lerp3 = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+
+function viewOf(P) {
+  const { sinA, cosA, sinE, cosE } = cameraOf(P);
+  return [cosA * cosE, sinA * cosE, sinE];
+}
+
+function lightOf(P) {
+  const { sinA, cosA } = cameraOf(P);
+  return unit3([-sinA, cosA, LIGHT_UP]);
+}
+
+const scaleOf = (P) => cameraOf(P).k;
+
+function bandOf(score) {
+  let tone = 0;
+  while (tone < BANDS.length && score >= BANDS[tone]) tone++;
+  return tone;
+}
+
+const toneOf = (normal, P) => bandOf(dot3(unit3(normal), lightOf(P)));
+
+function frameAlong(o, a) {
+  const axis = unit3(a);
+  const helper = Math.abs(axis[2]) > 0.9 ? [1, 0, 0] : [0, 0, 1];
+  const u = unit3(cross3(helper, axis));
+  const v = cross3(axis, u);
+  return { o, a: axis, u, v };
+}
+
+const frameOf = (o, a, u, v) => ({ o, a, u, v });
+
+function pointOf(F, s, r, angle) {
+  const c = Math.cos(angle);
+  const n = Math.sin(angle);
+  return [
+    F.o[0] + F.a[0] * s + r * (c * F.u[0] + n * F.v[0]),
+    F.o[1] + F.a[1] * s + r * (c * F.u[1] + n * F.v[1]),
+    F.o[2] + F.a[2] * s + r * (c * F.u[2] + n * F.v[2]),
+  ];
+}
+
+const radialOf = (F, angle) => {
+  const c = Math.cos(angle);
+  const n = Math.sin(angle);
+  return [c * F.u[0] + n * F.v[0], c * F.u[1] + n * F.v[1], c * F.u[2] + n * F.v[2]];
+};
+
+
+return { add3, sub3, mul3, dot3, cross3, unit3, frameAlong, pointOf, radialOf };})();
+
+
+const W = 800, H = 510;
+const FULL = Math.PI * 2;
+const rad = a => a * Math.PI / 180;
+const clamp = (n, a = 0, b = 1) => Math.max(a, Math.min(b, n));
+const mix = (a, b, t) => a + (b - a) * t;
+const wrap = t => (t % 1 + 1) % 1;
+const ease = t => { const q = clamp(t); return q * q * (3 - 2 * q); };
+const ramp = (t, a, b) => ease((t - a) / (b - a));
+const pulse = (t, a, b, c, d) => ramp(t, a, b) * (1 - ramp(t, c, d));
+const seed = (i, k = 0) => wrap(Math.sin(i * 127.1 + k * 311.7 + 17.41) * 43758.5453);
+function key(t, frames) {
+  for (let i = 1; i < frames.length; i++) {
+    if (t <= frames[i][0]) return mix(frames[i - 1][1], frames[i][1], ramp(t, frames[i - 1][0], frames[i][0]));
+  }
+  return frames.at(-1)[1];
+}
+const move = (x, y, z) => p => [p[0] + x, p[1] + y, p[2] + z];
+const spinZ = a => {
+  const c = Math.cos(a), s = Math.sin(a);
+  return ([x, y, z]) => [c * x - s * y, s * x + c * y, z];
+};
+const spinX = a => {
+  const c = Math.cos(a), s = Math.sin(a);
+  return ([x, y, z]) => [x, c * y - s * z, s * y + c * z];
+};
+const ring2 = (x, y, r, n = 24) => Array.from({ length:n }, (_, i) => [x + r * Math.cos(FULL * i / n), y + r * Math.sin(FULL * i / n)]);
+
+const PALETTE = {
+  steel: [139, 166, 185], chrome: [187, 210, 220], dark: [59, 87, 112],
+  graphite: [36, 53, 72], gasket: [25, 41, 57], window: [78, 144, 156],
+  mint: [75, 193, 170], brass: [216, 162, 76], purple: [152, 143, 231],
+  blue: [80, 183, 226], powder: [227, 191, 120], wet: [190, 119, 64],
+  tablet: [238, 225, 187], film: [132, 212, 184], white: [226, 233, 237]
+};
+const rgb = (m, k = 1) => {
+  const p = Array.isArray(m) ? m : PALETTE[m] || PALETTE.steel;
+  return '#' + p.map(v => Math.round(clamp(v * k, 0, 255)).toString(16).padStart(2, '0')).join('');
+};
+const identity = p => p;
+const number = x => String(Math.round(x * 10) / 10);
+
+function makeDraw(projection, options) {
+  const { cut, selected } = options;
+  const { sinA, cosA, sinE, cosE, k } = cameraOf(projection);
+  const { origin } = projection;
+  const view = [cosA * cosE, sinA * cosE, sinE];
+  const light = unit3([-0.44, 0.19, 0.91]);
+  const items = [];
+  const place = ([x, y, z]) => [
+    origin[0] + (x * sinA - y * cosA) * k,
+    origin[1] + ((x * cosA + y * sinA) * sinE - z * cosE) * k
+  ];
+  const depth = ([x, y, z]) => (x * cosA + y * sinA) * cosE + z * sinE;
+  const meanDepth = p => p.reduce((total, v) => total + depth(v), 0) / p.length;
+  const attrs = id => id ? ` data-part="${id}"` : '';
+  const near = direction => dot3(direction, view) > .13;
+  function face(points, id, mat, opts = {}) {
+    const n = unit3(cross3(sub3(points[1], points[0]), sub3(points[2], points[0])));
+    const facing = dot3(n, view);
+    if (!opts.two && facing < .007) return;
+    const direction = facing < 0 ? mul3(n, -1) : n;
+    const intensity = .65 + Math.max(-.28, dot3(direction, light)) * .29 + Math.abs(facing) * .18;
+    const lit = selected && selected === id;
+    const fill = rgb(lit ? 'mint' : mat, intensity);
+    const stroke = opts.edge ? (lit ? '#a4f6d4' : '#102637') : fill;
+    const alpha = opts.alpha ?? 1;
+    items.push({
+      d: meanDepth(points) + (opts.bias ?? 0),
+      markup: `<path d="${pathOf(points.map(place), true)}" fill="${fill}" stroke="${stroke}" stroke-width="${opts.edge ? 1.15 : .65}"${attrs(id)}${alpha < 1 ? ` opacity="${alpha}"` : ''}/>`
+    });
+  }
+  function line(points, color, width = 1.5, opts = {}) {
+    const p = points.map(place);
+    items.push({
+      d: meanDepth(points) + (opts.bias ?? .25),
+      markup: `<path d="${pathOf(p)}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${opts.dash ? ` stroke-dasharray="${opts.dash}"` : ''}${attrs(opts.part)}${opts.alpha ? ` opacity="${opts.alpha}"` : ''}/>`
+    });
+  }
+  function dot(p, radius, color, opts = {}) {
+    const [x, y] = place(p);
+    const r = radius * k;
+    const fill = selected && opts.part === selected ? '#9feacb' : rgb(color);
+    const rx = opts.tablet ? r * 1.34 : r;
+    const ry = opts.tablet ? r * .72 : r;
+    const angle = opts.angle ?? 0;
+    items.push({
+      d: depth(p) + (opts.bias ?? 0),
+      markup: `<ellipse cx="${number(x)}" cy="${number(y)}" rx="${number(rx)}" ry="${number(ry)}" fill="${fill}"${opts.tablet ? ` transform="rotate(${number(angle)} ${number(x)} ${number(y)})" stroke="#172837" stroke-width=".7"` : ''}${attrs(opts.part)}${opts.alpha ? ` opacity="${opts.alpha}"` : ''}/>`
+    });
+  }
+  function arrow(a, b, color, opts = {}) {
+    const [x, y] = place(b), [u, v] = place(a);
+    const mag = Math.hypot(x - u, y - v);
+    if (mag < 4) return;
+    const dx = (x - u) / mag, dy = (y - v) / mag, w = opts.width ?? 1.8;
+    const tip = opts.tip ?? 5;
+    const p = [x - dx * tip * 1.5, y - dy * tip * 1.5];
+    items.push({
+      d: meanDepth([a, b]) + (opts.bias ?? 0),
+      markup: `<path d="${pathOf([[u,v],p])}" stroke="${color}" stroke-width="${w}" fill="none" stroke-linecap="round"/><path d="${pathOf([[x,y],[p[0]-dy*tip*.63,p[1]+dx*tip*.63],[p[0]+dy*tip*.63,p[1]-dx*tip*.63]],true)}" fill="${color}"/>`
+    });
+  }
+  function prism(plan, z0, z1, id, mat, opts = {}) {
+    const tx = opts.tx ?? identity;
+    const lower = plan.map(([x, y]) => tx([x,y,z0]));
+    const upper = plan.map(([x, y]) => tx([x,y,z1]));
+    const n = plan.length;
+    if (!opts.noCap) {
+      face([...lower].reverse(), id, mat, opts);
+      face(upper, id, mat, opts);
+    }
+    for (let i=0; i<n; i++) {
+      const j = (i + 1) % n;
+      const radial = cross3(sub3(lower[j], lower[i]), sub3(upper[i], lower[i]));
+      if (opts.removeNear && cut && near(unit3(radial))) continue;
+      face([lower[i],lower[j],upper[j],upper[i]],id,mat,opts);
+    }
+  }
+  function box(x, y, z, w, d, h, id, mat, opts = {}) {
+    const plan = [[x-w/2,y-d/2],[x+w/2,y-d/2],[x+w/2,y+d/2],[x-w/2,y+d/2]];
+    prism(plan,z,z+h,id,mat,opts);
+  }
+  function plate(x, y, z, w, d, h, id, mat, opts = {}) {
+    const c = Math.min(4, w / 6, d / 6);
+    const l = x-w/2, r = x+w/2, b = y-d/2, f = y+d/2;
+    prism([[l+c,b],[r-c,b],[r,b+c],[r,f-c],[r-c,f],[l+c,f],[l,f-c],[l,b+c]], z,z+h,id,mat,opts);
+  }
+  function profile(center, axis, rings, id, mat, opts = {}) {
+    const F = frameAlong(center, axis);
+    const n = opts.n ?? 28;
+    const tx = opts.tx ?? identity;
+    const directions = Array.from({length:n},(_,i) => FULL * i / n);
+    const ring = (s,r) => directions.map(a => tx(pointOf(F,s,r,a)));
+    const points = rings.map(([s,r])=>ring(s,r));
+    const remove = i => opts.section && cut && near(sub3(tx(radialOf(F,directions[i] + Math.PI / n)),tx([0,0,0])));
+    for(let j=0;j<rings.length-1;j++) {
+      for(let i=0;i<n;i++) {
+        if (remove(i)) continue;
+        const e=(i+1)%n;
+        face([points[j][i],points[j][e],points[j+1][e],points[j+1][i]],id,mat,opts);
+      }
+    }
+    if (opts.cap && !(opts.section && cut)) {
+      face([...points[0]].reverse(),id,mat,opts);
+      face(points.at(-1),id,mat,opts);
+    }
+    if (opts.rim) {
+      for (const layer of opts.rim) {
+        for (let i=0;i<n;i++) {
+          if (remove(i)) continue;
+          line([points[layer][i],points[layer][(i+1)%n]],opts.rimColor ?? '#bcccd0',opts.rimWidth ?? 1,{part:id,bias:.25});
+        }
+      }
+    }
+    return F;
+  }
+  function rod(a, b, r, id, mat, opts = {}) {
+    const axis = sub3(b, a);
+    return profile(a, axis, [[0,r],[Math.hypot(...axis),r]], id, mat, { n: 16, cap: true, ...opts });
+  }
+  function flange(a, axis, length, inner, outer, id, mat, opts = {}) {
+    return profile(a, axis, [[0,inner],[0,outer],[length,outer],[length,inner],[0,inner]],id,mat,{two: true,...opts});
+  }
+  function pipe(points, r, id, mat, opts = {}) {
+    for(let i=1;i<points.length;i++) rod(points[i-1],points[i],r,id,mat,{n:12,...opts});
+  }
+  function outlet(a,b,w,h,id,mat) {
+    const direction = unit3(sub3(b,a));
+    const sideways = unit3(cross3(direction,[0,0,1]));
+    const at = (p,sign,z) => add3(add3(p,mul3(sideways,sign*w/2)),[0,0,z]);
+    const c = at(a,-1,0), d = at(a,1,0), e = at(b,-1,0), f = at(b,1,0);
+    face([c,e,f,d],id,mat,{two:true,edge:true});
+    face([c,e,at(b,-1,h),at(a,-1,h)],id,mat,{two:true,edge:true});
+    face([d,f,at(b,1,h),at(a,1,h)],id,mat,{two:true,edge:true});
+  }
+  function bolts(x,y,z,r,count,id,mat='chrome') {
+    for(let i=0;i<count;i++) {
+      const a = FULL*i/count;
+      const q = [x+r*Math.cos(a),y+r*Math.sin(a),z];
+      rod(q,add3(q,[0,0,1.8]),1.7,id,mat,{n:6});
+    }
+  }
+  return { view, near, k, cut, place, face, line, dot, arrow, prism, box, plate, profile, rod, flange, pipe, outlet, bolts,
+    render: () => items.sort((a,b)=>a.d-b.d).map(x=>x.markup).join('') };
+}
+
+function platform(d, w, l, x = 0, y = 0, z = 0) {
+  d.plate(x,y,z,w,l,5,'frame','dark',{edge:true});
+  d.plate(x,y,z+5,w-1,l-1,2,'frame','steel');
+  for(const sx of [-1,1]) for(const sy of [-1,1]) {
+    const a = [x + sx*(w/2 - 12),y + sy*(l/2 - 12),z - 2];
+    d.rod(a,add3(a,[0,0,-6]),5,'frame','gasket',{n:12});
+    const q = [a[0],a[1],z+7];
+    d.rod(q,add3(q,[0,0,2]),2,'frame','chrome',{n:6});
+  }
+}
+function panel(d,x,y,z,w,l,h,id='frame') {
+  d.plate(x,y,z,w,l,h,id,'steel',{edge:true});
+  d.box(x+w/2*.32,y+l/2+.4,z+h*.38,w*.28,1.2,h*.4,id,'graphite',{edge:true});
+  for(let i=0;i<3;i++) d.dot([x+w/2*.32 - w*.075+i*w*.075,y+l/2+1.1,z+h*.58],1.25,i===0?'mint':'dark',{part:id});
+}
+function motor(d, a, b, radius, id) {
+  d.rod(a,b,radius,id,'dark',{n:20});
+  const axis = sub3(b,a);
+  for(let j=1;j<=6;j++) {
+    const p = add3(a,mul3(axis,j/8));
+    const q = add3(p,mul3(unit3(axis),1.6));
+    d.rod(p,q,radius+1.1,id,'steel',{n:16});
+  }
+  d.rod(add3(a,mul3(unit3(axis),-2)),a,radius*.8,id,'graphite',{n:16});
+}
+function airflow(d, a, b, t, count, color = '#72dcf4') {
+  const axis = sub3(b,a);
+  for(let i=0;i<count;i++) {
+    const s = wrap(i/count+t);
+    if (s > .93) continue;
+    d.arrow(add3(a,mul3(axis,s)),add3(a,mul3(axis,Math.min(.985,s+.11))),color,{width:1.4,tip:3.8});
+  }
+}
+
+
+
+const up = [0,0,1], across = [1,0,0];
+const cutShell = { section: true, two: true };
+const air = '#75d6ee', energy = '#e5b96c';
+
+const machines = {
+  granulator: {
+    file:'High_Shear_Granulator.html', title:'High-shear granulator', operation:'Wet granulation',
+    intro:'An impeller sweeps powder through the bowl while a side chopper breaks up wet clumps.',
+    source:['GEA · High-shear mixer granulators','https://www.gea.com/en/products/granulators/high-shear-granulators/high-shear-mixer-granulators/'],
+    seconds:12, start:.39, camera:[54,24], bounds:[[-83,-60,-9],[110,63,147]],
+    phases:[
+      [0,.14,'Dry mix','The bottom-driven impeller circulates the dry blend around the bowl.'],
+      [.24,.40,'Add binder','Liquid binder wets the moving powder so the particles begin to stick together.'],
+      [.51,.64,'Wet massing','The impeller moves the wet mass past the high-speed chopper, which breaks up oversized clumps.'],
+      [.78,.89,'Discharge','The side outlet opens. The impeller sweeps wet granules through the outlet.']
+    ],
+    parts:[
+      ['bowl','Mixing bowl','Contains the batch and directs material back toward the impeller.',[-34,-20,108]],
+      ['impeller','Bottom impeller','Three pitched blades sweep the bottom and circulate the batch past the chopper.',[25,7,70]],
+      ['chopper','Side chopper','A separate horizontal motor drives the small blades that break up wet lumps.',[36,-16,87]],
+      ['binder','Binder nozzle','Feeds liquid binder down into the moving powder.',[-16,4,122]],
+      ['outlet','Discharge valve','Opens a path from the lower bowl to the transfer chute.',[69,-17,64]],
+      ['product','Batch material','Light powder darkens as binder is added. Larger particles represent wet granules.',[12,17,77]]
+    ],
+    draw:drawGranulator
+  },
+  dryer: {
+    file:'Fluid_Bed_Dryer.html', title:'Fluid-bed dryer', operation:'Granule drying',
+    intro:'Heated air suspends wet granules and carries away moisture through the exhaust.',
+    source:['GEA · Fluid bed technology','https://www.gea.com/en/products/dryers-particle-processing/fluid-beds/'],
+    seconds:13, start:.46, camera:[61,16], bounds:[[-111,-67,-9],[107,62,231]],
+    phases:[
+      [0,.09,'Load','Wet granules rest on the perforated distributor plate.'],
+      [.16,.27,'Fluidize','Air enters below the plate and lifts the granules into a moving bed.'],
+      [.36,.56,'Dry','Warm air passes through the suspended bed and exits through the product filters. The filters retain entrained fines.'],
+      [.74,.81,'Settle','Airflow falls and the dry granules settle back onto the distributor.'],
+      [.87,.94,'Discharge','The dry granules leave through a product outlet above the distributor.']
+    ],
+    parts:[
+      ['inlet','Air inlet','Delivers conditioned process air to the plenum below the distributor.',[-76,11,37]],
+      ['distributor','Distributor plate','Spreads upward airflow across the bed while supporting the granules at rest.',[29,14,65]],
+      ['chamber','Expansion chamber','Its widening cross-section slows the rising air so coarser particles fall back.',[-40,-16,126]],
+      ['filters','Product filters','Retain fine particles while air and water vapour continue to the exhaust.',[15,0,169]],
+      ['exhaust','Exhaust duct','Carries moisture-laden air away from the vessel.',[77,-9,212]],
+      ['product','Granules','Particles lift and fall as air passes through the bed. The lighter colour represents drying.',[0,4,97]],
+      ['outlet','Product outlet','Transfers dry granules from the bowl after the bed settles.',[61,0,60]]
+    ],
+    draw:drawDryer
+  },
+  blender: {
+    file:'IBC_Bin_Blender.html', title:'IBC bin blender', operation:'Final blending',
+    intro:'A drive turns the clamped container. The powder bed repeatedly falls and folds under gravity.',
+    source:['GEA · IBC blenders','https://www.gea.com/en/products/product-handling-systems/contained-materials-handling-systems/ibc-blenders/'],
+    seconds:14, start:.32, camera:[56,19], bounds:[[-113,-62,-9],[110,62,192]],
+    phases:[
+      [0,.07,'Clamp','The cradle holds the sealed intermediate bulk container at its mounting points.'],
+      [.16,.25,'Tumble','The motor rotates the cradle and bin together. The contents fall as the bin tips.'],
+      [.39,.51,'Blend','Repeated turnovers redistribute the granules and other dry ingredients.'],
+      [.74,.80,'Park','The drive returns the bin to its upright position with the outlet at the bottom.'],
+      [.88,.95,'Discharge','The bottom valve opens and the final blend drops into the transfer connection.']
+    ],
+    parts:[
+      ['bin','Sealed IBC','A lidded container holds the batch and tapers to a bottom discharge valve.',[26,36,25]],
+      ['clamp','Clamping cradle','Locks the bin to the rotating drive. It turns with the bin as a unit.',[48,31,36]],
+      ['drive','Drive and bearings','The fixed pedestals support a horizontal axis. The drive rotates the cradle around that axis.',[83,0,98]],
+      ['product','Powder bed','Gravity keeps the material toward the bottom in world space, even when the bin is upside down.',[0,0,-17]],
+      ['outlet','Butterfly valve','Stays closed during rotation and opens once the bin is parked upright.',[0,0,-58]]
+    ],
+    draw:drawBlender
+  },
+  press: {
+    file:'Rotary_Tablet_Press.html', title:'Rotary tablet press', operation:'Tablet compression',
+    intro:'A rotating turret carries matched punches and dies past fixed feeding, compression and ejection stations.',
+    source:['NIOSH · Rotary tablet press compression cycle','https://stacks.cdc.gov/view/cdc/179719/cdc_179719_DS1.pdf'],
+    seconds:13, start:.69, camera:[62,27], bounds:[[-88,-83,-9],[129,92,196]],
+    detailBounds:[[-44,-32,23],[86,28,173]], detailCamera:[65,16],
+    phases:[
+      [0,.09,'Fill','The lower punch drops to create space for granules under the feed frame.'],
+      [.17,.23,'Meter','The lower punch rises to set the volume of granules left in the die.'],
+      [.28,.32,'Precompress','The punches lightly compact the powder bed as the station passes the first rollers.'],
+      [.36,.405,'Compress','The main rollers push both punches toward one another to form the tablet.'],
+      [.48,.54,'Retract','The upper punch withdraws while the tablet stays in the die.'],
+      [.59,.69,'Eject','The ejection cam lifts the lower punch until its face reaches the die table and the entire tablet clears the bore.'],
+      [.74,.82,'Take off','A fixed take-off blade diverts the tablet into the chute as the turret moves past it.'],
+      [.91,.97,'Return','The lower punch descends to the fill depth for the next pass.']
+    ],
+    parts:[
+      ['turret','Die table and turret','Rotates the punch-and-die stations together under the fixed machine tooling.',[0,38,103]],
+      ['feed','Feed frame','Supplies granules to each die as it passes underneath the feeder.',[-53,-10,126]],
+      ['upper','Upper punch','Enters from above during compression, then withdraws to clear the finished tablet.',null],
+      ['lower','Lower punch','Sets fill depth, supports compression and raises the tablet until it is completely above the die.',null],
+      ['rollers','Compression rollers','Fixed-axis rollers press on the moving punch heads. Use Turret view to locate them.',[-52,25,158]],
+      ['cam','Ejection cam','A fixed rising track beneath the lower punch head converts turret rotation into upward punch travel.',null],
+      ['tablet','Tablet','Forms between the punches, rises out of the die, and travels sideways into the chute.',null],
+      ['chute','Take-off blade and chute','The blade stays fixed. Contact with the moving tablet sends it off the die table and into the chute.',[79,38,111]]
+    ],
+    draw:drawPress
+  },
+  coater: {
+    file:'Perforated_Pan_Tablet_Coater.html', title:'Perforated pan tablet coater', operation:'Film coating',
+    intro:'Tablets tumble through a spray zone while drying air passes through the bed and the perforated drum.',
+    source:['Freund · Pan coating','https://www.freundglobal.com/technology/pan-coating/'],
+    seconds:14, start:.43, camera:[50,22], bounds:[[-100,-81,-9],[121,73,176]],
+    phases:[
+      [0,.12,'Tumble','The drum and its baffles lift tablets, then let them cascade through the bed.'],
+      [.23,.44,'Spray and dry','Fixed guns spray coating onto the moving tablets as process air removes moisture.'],
+      [.65,.75,'Final drying','The guns stop. The tablets keep tumbling while air passes through the bed.'],
+      [.84,.94,'Unload','Coated tablets travel out of the front opening and down the discharge chute.']
+    ],
+    parts:[
+      ['drum','Perforated drum','Turns on a horizontal axis. Air can pass through its perforated wall.',[-31,-35,130]],
+      ['baffles','Lifting baffles','Turn with the drum and lift sections of the tablet bed before they cascade.',[-4,28,68]],
+      ['spray','Spray guns','Stay fixed above the moving bed and aim coating liquid at the tablets.',[10,7,119]],
+      ['air','Drying air path','Air passes down through the tablet bed and drum wall into the lower exhaust plenum.',[-13,11,47]],
+      ['product','Tablet bed','The tablets tumble repeatedly through the spray zone. Green indicates film coverage.',[0,7,63]],
+      ['chute','Discharge chute','Receives tablets from the drum mouth at the end of the batch.',[91,0,41]]
+    ],
+    draw:drawCoater
+  }
+};
+
+function drawGranulator(d,t) {
+  const drive = 7.25 * FULL * Math.min(t,.88);
+  const chopperAngle = 18 * FULL * Math.min(t,.8);
+  const binder = pulse(t,.245,.29,.49,.515);
+  const wetness = ramp(t,.24,.64);
+  const drain = ramp(t,.79,.98);
+  platform(d,161,108);
+  if (!d.cut) panel(d,-3,0,7,146,94,39);
+  else {
+    d.box(-4,-42,7,143,7,42,'frame','dark',{edge:true});
+    for(const x of [-63,60]) d.plate(x,5,7,12,58,41,'frame','steel',{edge:true});
+    motor(d,[0,0,9],[0,0,40],14,'impeller');
+  }
+  d.plate(-3,0,46,153,97,6,'frame','steel',{edge:true});
+  d.rod([0,0,41],[0,0,70],9,'impeller','graphite');
+  d.profile([0,0,0],up,[[52,30],[54,40],[58,48],[67,54],[115,56],[122,54]],'bowl','steel',{...cutShell,rim:[0,5]});
+  d.flange([0,0,116],up,5,52,59,'bowl','chrome',cutShell);
+  d.profile([0,0,0],up,[[122,54],[126,53],[132,37],[136,20]],'bowl','steel',{...cutShell,cap:true});
+  d.flange([0,0,132],up,4,13,21,'bowl','chrome');
+  d.rod([0,0,136],[0,0,143],13,'bowl','dark');
+  if (d.cut) {
+    d.rod([0,0,56],[0,0,81],9,'impeller','chrome');
+    for(let i=0;i<3;i++) {
+      const a = drive+i*FULL/3, tx=spinZ(a);
+      d.prism([[6,-5],[31,-8],[46,-2],[46,6],[28,10],[11,6]],61,67,'impeller','brass',{tx,edge:true});
+      d.prism([[14,2],[43,0],[47,3],[35,8],[16,8]],67,71,'impeller','chrome',{tx});
+      d.rod(tx([31,0,69]),tx([31,0,71.5]),1.7,'impeller','dark',{n:6});
+    }
+    for(let i=0;i<135;i++) {
+      if (seed(i,4)<drain) continue;
+      const r = 12+36*Math.sqrt(seed(i,0));
+      const a = FULL*seed(i,1)+drive*(.58+.18*seed(i,2));
+      const z = 68+10*seed(i,3)+4*Math.sin(a*2+t*19);
+      const color = seed(i,6)<wetness ? 'wet' : 'powder';
+      d.dot([r*Math.cos(a),r*Math.sin(a),z],mix(.7,1.75,wetness)*(.7+seed(i,5)*.6),color,{part:'product'});
+    }
+    d.rod([52,-16,88],[30,-16,88],4,'chopper','chrome');
+    const spin = spinX(chopperAngle);
+    const place = p => add3([33,-16,88],spin(p));
+    d.rod([31,-16,88],[38,-16,88],6,'chopper','dark',{n:12});
+    for(let i=0;i<4;i++){
+      const a = FULL*i/4, c = Math.cos(a), s = Math.sin(a);
+      const blade = (r,h) => place([-1,c*r-s*h,s*r+c*h]);
+      d.face([blade(4,-2),blade(12,-2),blade(14,2),blade(4,2)],'chopper','purple',{two:true,edge:true});
+    }
+    d.rod([-16,4,119],[-16,4,126],2.9,'binder','brass');
+    if(binder>.05) for(let i=0;i<24;i++) {
+      const p = wrap(i/24+t*10);
+      const a = FULL*seed(i,4);
+      const r = 16*p*seed(i,7);
+      d.dot([-16+r*Math.cos(a),4+r*Math.sin(a),119-40*p],.75+seed(i,5)*.5,'blue',{part:'binder',alpha:binder});
+    }
+  }
+  motor(d,[57,-16,88],[81,-16,88],10,'chopper');
+  d.flange([54,-16,88],across,4,5,12,'chopper','chrome');
+  d.pipe([[-16,4,127],[-16,4,140],[-42,4,140]],2,'binder','blue');
+  d.rod([47,-17,65],[64,-17,65],8,'outlet','dark');
+  d.flange([60,-17,65],across,4,6,11,'outlet','chrome');
+  const lift = 12*pulse(t,.775,.84,.96,1);
+  d.plate(65,-17,56+lift,3,19,19,'outlet','purple',{edge:true});
+  d.outlet([63,-17,59],[98,-18,35],19,7,'outlet','steel');
+  if(drain>0 && drain<1) for(let i=0;i<32;i++) {
+    const q = wrap(t*8+i/32);
+    d.dot([mix(63,98,q),-17+(seed(i,7)-.5)*12,mix(64,36,q)+Math.sin(q*Math.PI)*4],1.05,'wet',{part:'product'});
+  }
+  return {impeller:[25*Math.cos(drive),25*Math.sin(drive),70]};
+}
+
+function drawDryer(d,t) {
+  const on = pulse(t,.155,.29,.73,.855);
+  const dry = ramp(t,.34,.76);
+  const drain = ramp(t,.87,.995);
+  platform(d,152,112);
+  for(const [x,y] of [[-32,24],[32,24],[-32,-24],[32,-24]]) d.plate(x,y,7,7,7,48,'frame','steel',{edge:true});
+  d.rod([-92,11,31],[-29,11,31],9,'inlet','dark');
+  d.pipe([[-91,11,31],[-9,11,31],[0,3,46],[0,0,51]],8,'inlet','steel');
+  d.flange([-92,11,31],across,4,6,12,'inlet','chrome');
+  d.flange([-61,11,31],across,4,6,11,'inlet','chrome');
+  d.profile([0,0,0],up,[[40,14],[44,25],[59,41],[65,42]],'inlet','dark',{...cutShell,rim:[3]});
+  d.rod([0,0,62],[0,0,66],43,'distributor','chrome',{n:36});
+  d.flange([0,0,63],up,4,40,46,'distributor','steel');
+  d.profile([0,0,0],up,[[67,44],[87,44],[120,53],[146,58],[159,58],[188,58],[195,54],[204,40],[210,19]],'chamber','steel',{...cutShell,rim:[0,4,6,8],cap:true});
+  for(const z of [68,151,190]) {
+    const r=z===68?47:61;
+    d.flange([0,0,z],up,3,r-5,r,'chamber','chrome',cutShell);
+  }
+  d.profile([0,0,0],up,[[207,19],[213,19],[219,13],[222,13]],'exhaust','dark',{cap:true});
+  d.pipe([[0,0,218],[0,-10,225],[15,-10,225],[78,-10,225],[94,-10,209]],7.6,'exhaust','steel');
+  d.flange([75,-10,225],across,4,6,10,'exhaust','chrome');
+  d.rod([0,0,113],[0,0,117],4,'chamber','chrome');
+  d.rod([17,40,116],[18,46,117],8,'chamber','dark');
+  d.flange([18,42,117],[.2,1,.1],4,5,9,'chamber','chrome');
+  if(d.cut) {
+    for(let x=-34;x<=34;x+=7) for(let y=-34;y<=34;y+=7) {
+      if (x*x+y*y<39*39) d.dot([x,y,66.3],.88,'graphite',{part:'distributor',bias:.2});
+    }
+    for(let i=0;i<7;i++) {
+      const a = FULL*i/6, r = i===6?0:32;
+      const p = [r*Math.cos(a),r*Math.sin(a),153];
+      d.profile(p,up,[[0,4.5],[4,7.5],[35,7.5],[39,8.1]],'filters','white',{n:12,cap:true});
+      for (const z of [6,19,32]) d.flange(add3(p,[0,0,z]),up,1,6.5,7.9,'filters','dark',{n:12});
+    }
+    d.flange([0,0,191],up,3,48,57,'filters','chrome');
+    for(let i=0;i<151;i++) {
+      if (seed(i,0)<drain) continue;
+      const a = FULL*(seed(i,1)+.06*t+on*.026*Math.sin(t*20+i));
+      const r = 40*Math.sqrt(seed(i,2));
+      const float = Math.pow(.5+.5*Math.sin(FULL*(t*(2+seed(i,3)*2)+seed(i,4))),1.8);
+      const z = 68+seed(i,5)*9+on*(15+42*seed(i,6))*float;
+      d.dot([r*Math.cos(a),r*Math.sin(a),z],1+seed(i,5)*.9,seed(i,7)<dry?'powder':'wet',{part:'product'});
+    }
+    if(on>.06) {
+      airflow(d,[-88,11,31],[-8,10,31],t*5,5);
+      for(const [x,y] of [[-26,7],[17,-18],[8,27]]) airflow(d,[x,y,53],[x*.9,y,145],t*4.1,4);
+      airflow(d,[3,-10,225],[82,-10,225],t*4,5);
+    }
+  }
+  d.rod([39,8,71],[55,11,70],6,'outlet','dark');
+  d.outlet([48,11,69],[84,12,42],18,7,'outlet','steel');
+  if(drain>0 && drain<1) for(let i=0;i<21;i++){
+    const q = wrap(i/21+t*7);
+    d.dot([mix(51,84,q),11+(seed(i,5)-.5)*12,mix(73,44,q)],1.4,'powder',{part:'product'});
+  }
+  return {};
+}
+
+const binCross = [[-14,-50],[14,-50],[35,-15],[35,42],[29,48],[-29,48],[-35,42],[-35,-15]];
+const binWidths = [[-50,14],[-15,40],[42,40],[48,34]];
+function clipBelow(vertices, z) {
+  const out = [];
+  for(let i=0;i<vertices.length;i++) {
+    const p = vertices[i], q = vertices[(i+1)%vertices.length];
+    const a = p[1]<=z, b = q[1]<=z;
+    if(a) out.push(p);
+    if(a!==b) out.push([mix(p[0],q[0],(z-p[1])/(q[1]-p[1])),z]);
+  }
+  return out;
+}
+function area(poly) {
+  return Math.abs(poly.reduce((sum,p,i)=>{const q=poly[(i+1)%poly.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2;
+}
+function binFill(angle, fill) {
+  const rotate = spinX(angle);
+  const wall = binCross.map(([y,z])=>rotate([0,y,z]).slice(1));
+  const base = Math.min(...wall.map(p=>p[1])), top = Math.max(...wall.map(p=>p[1]));
+  let low = base, high = top;
+  for(let i=0;i<13;i++) {
+    const m = (low+high)/2;
+    if(area(clipBelow(wall,m))/area(wall) < fill) low=m; else high=m;
+  }
+  return {wall,base,level:(low+high)/2};
+}
+function yLimits(poly,z) {
+  const edges = [];
+  for(let i=0;i<poly.length;i++) {
+    const p=poly[i], q=poly[(i+1)%poly.length];
+    if((p[1]<z)===(q[1]<z)) continue;
+    edges.push(mix(p[0],q[0],(z-p[1])/(q[1]-p[1])));
+  }
+  return [Math.min(...edges),Math.max(...edges)];
+}
+function blendKinematics(t) {
+  const turn = key(t,[[0,0],[.13,0],[.22,.17],[.69,1.90],[.78,2],[1,2]]);
+  return {angle:FULL*turn, clampTravel:8*(1-ramp(t,.015,.14)), discharge:ramp(t,.878,.995)};
+}
+function drawBlender(d,t) {
+  const {angle,clampTravel,discharge}=blendKinematics(t);
+  const center=[0,0,105];
+  const tx0 = spinX(angle), inv = spinX(-angle);
+  const tx = p => add3(center,tx0(p));
+  platform(d,213,109);
+  for(const x of [-86,86]) {
+    panel(d,x,0,8,24,45,76,'drive');
+    d.plate(x,0,82,31,43,17,'drive','dark',{edge:true});
+    d.rod([x-13,0,105],[x+13,0,105],13,'drive','steel');
+    d.flange([x+(x>0?13:-16),0,105],across,3,5,15,'drive','chrome');
+  }
+  motor(d,[92,0,105],[109,0,105],9,'drive');
+  d.rod([-86,0,105],[-46,0,105],7,'drive','chrome');
+  d.rod([46,0,105],[86,0,105],7,'drive','chrome');
+  for(const x of [-47,47]) {
+    d.plate(x,-30,-38,9,8,87,'clamp','dark',{tx,edge:true});
+    d.plate(x,30,-38,9,8,87,'clamp','dark',{tx,edge:true});
+    d.plate(x,0,-38,10,67,6,'clamp','steel',{tx,edge:true});
+    d.plate(x,0,38+clampTravel,10,67,7,'clamp','purple',{tx,edge:true});
+    d.rod(tx([x,0,-2]),tx([x,0,18]),9,'clamp','chrome',{n:16});
+  }
+  const levels=[[-50,14,14],[-15,40,35],[42,40,35],[48,34,29]];
+  const corners=(z,x,y)=>[[-x,-y,z],[x,-y,z],[x,y,z],[-x,y,z]];
+  const l=levels.map(a=>corners(...a).map(tx));
+  for(let j=0;j<l.length-1;j++) for(let i=0;i<4;i++) {
+    const n=(i+1)%4;
+    const normal = tx0([[0,-1,0],[1,0,0],[0,1,0],[-1,0,0]][i]);
+    if(d.cut&&d.near(normal)) continue;
+    d.face([l[j][i],l[j][n],l[j+1][n],l[j+1][i]],'bin',j===0?'dark':'steel',{two:true,edge:true});
+    d.line([l[j+1][i],l[j+1][n]],'#bdcdd5',1,{part:'bin'});
+  }
+  if(!d.cut) {
+    d.face(l.at(-1),'bin','chrome');
+    d.face([...l[0]].reverse(),'bin','steel');
+  }
+  d.profile([0,0,0],up,[[46,15],[48,19],[51,19],[53,16]],'bin','chrome',{tx,cap:true,n:20});
+  d.plate(0,0,53,15,6,3,'bin','dark',{tx,edge:true});
+  d.profile([0,0,0],up,[[-61,10],[-58,14],[-51,14],[-49,15]],'outlet','chrome',{tx,cap:true,n:18});
+  d.rod(tx([11,0,-56]),tx([24,0,-56]),2,'outlet','purple',{n:10});
+  d.rod(tx([24,0,-56]),tx([24,7+discharge*5,-56]),2.2,'outlet','purple',{n:10});
+  if(d.cut && discharge<1) {
+    const amount=.43*(1-discharge)+.008;
+    const {wall,base,level}=binFill(angle,amount);
+    const blend=ramp(t,.2,.68);
+    for(let i=0;i<166;i++) {
+      if(seed(i,9)<discharge) continue;
+      const dz = .04+.92*wrap(seed(i,0)+.06*Math.sin(t*18+seed(i,1)*FULL));
+      const z = mix(base,level,dz);
+      const [a,b]=yLimits(wall,z);
+      const y = mix(a,b,.05+.9*wrap(seed(i,1)+.082*Math.sin(t*16+i*.21)));
+      const local=inv([0,y,z]);
+      const w=key(clamp(local[2],-50,48),binWidths);
+      const x=(2*seed(i,3)-1)*(w-2);
+      const mixColor=seed(i,5)<blend?seed(i,7)<.5:dz>.56;
+      d.dot(add3(center,[x,y,z]),1.15+seed(i,4)*.76,mixColor?'powder':'film',{part:'product'});
+    }
+  }
+  d.flange([0,0,11],up,6,12,21,'outlet','dark');
+  d.flange([0,0,18],up,4,10,16,'outlet','steel');
+  if(discharge>0&&discharge<1) for(let i=0;i<28;i++){
+    const q=wrap(t*9+i/28);
+    d.dot([7*(seed(i,8)-.5),7*(seed(i,9)-.5),mix(43,21,q*q)],1.25,seed(i,5)<.5?'powder':'film',{part:'product'});
+  }
+  return {bin:tx([22,34,28]),clamp:tx([47,30,26]),product:tx([0,0,-8]),outlet:tx([0,0,-54])};
+}
+
+const DIE_Z=111, PUNCH_R=51, STATIONS=9;
+const pressAngle = t => FULL*(t-.69)+rad(61);
+const aroundPress = (t,r,z=0) => [r*Math.cos(pressAngle(t)),r*Math.sin(pressAngle(t)),z];
+const shoeCenter = aroundPress(.081,53);
+const transferOrigin = aroundPress(.76,PUNCH_R);
+const transferHeading = pressAngle(.76)+.47;
+const transferAt = (distance,z) => add3(transferOrigin,[distance*Math.cos(transferHeading),distance*Math.sin(transferHeading),z]);
+
+function pressKinematics(t) {
+  const lower = DIE_Z+key(t,[[0,-19],[.16,-19],[.253,-15],[.327,-13],[.363,-14],[.396,-10],[.59,-10],[.712,0],[.811,0],[.95,-19],[1,-19]]);
+  const upper = DIE_Z+key(t,[[0,33],[.216,33],[.282,9],[.326,-4],[.355,10],[.399,-5],[.445,-5],[.49,5],[.573,33],[1,33]]);
+  const packed = t>=.399&&t<.912;
+  const horizontal = 24*ramp(t,.76,.816)+48*ramp(t,.816,.911);
+  const tabletZ = t<.76?lower:DIE_Z-23*ramp(t,.82,.91);
+  const tablet = t<.76?aroundPress(t,PUNCH_R,tabletZ):transferAt(horizontal,tabletZ);
+  const powderTop = Math.max(lower,Math.min(DIE_Z-.5,upper,lower+19*ramp(t,.018,.155)));
+  return {lower,upper,packed,horizontal,tablet,tabletZ,powderTop};
+}
+
+function drawPunch(d,p,m,lower) {
+  const [x,y]=p;
+  const end=lower?m.lower:m.upper;
+  const id=lower?'lower':'upper';
+  const sign=lower?-1:1;
+  const at = dz => [x,y,end+sign*dz];
+  const tone=lower?'purple':'chrome';
+  d.rod(at(0),at(12),5.8,id,tone,{n:14});
+  d.rod(at(12),at(30),4.1,id,'steel',{n:12});
+  d.rod(at(29),at(33),7.5,id,tone,{n:14});
+  d.rod(at(33),at(34),6.2,id,'graphite',{n:14});
+}
+function holeDeck(d,outer,c,z0,z1,id,material,r,section=false) {
+  const inner = outer.map(([x,y])=>{
+    const len=Math.hypot(x-c[0],y-c[1]);
+    return [c[0]+r*(x-c[0])/len,c[1]+r*(y-c[1])/len];
+  });
+  const at = (p,z) => [p[0],p[1],z];
+  for(let i=0;i<outer.length;i++) {
+    const j=(i+1)%outer.length;
+    const o0=outer[i], o1=outer[j], i0=inner[i], i1=inner[j];
+    const middle=[(o0[0]+o1[0])/2-c[0],(o0[1]+o1[1])/2-c[1],0];
+    if(section&&d.cut&&d.near(middle)) continue;
+    d.face([at(o0,z1),at(o1,z1),at(i1,z1),at(i0,z1)],id,material,{edge:true});
+    d.face([at(o0,z0),at(o1,z0),at(o1,z1),at(o0,z1)],id,'steel',{edge:true,two:section});
+    d.face([at(i1,z0),at(i0,z0),at(i0,z1),at(i1,z1)],id,'dark',{two:true});
+  }
+}
+function pressProduct(d,t,m,center,detail) {
+  if(m.packed){
+    const [x,y,z] = detail?[m.horizontal,0,m.tabletZ]:m.tablet;
+    d.profile([x,y,z],up,[[0,5.3],[.6,5.8],[4.4,5.8],[5,5.2]],'tablet','tablet',{cap:true,n:18});
+    d.dot([x,y,z+5.1],1.3,'powder',{part:'tablet',bias:.4});
+    return [x,y,z+4];
+  }
+  if(t>.399) return [center[0],center[1],DIE_Z];
+  const h = m.powderTop-m.lower;
+  if(h>.3) for(let i=0;i<53;i++) {
+    const a=FULL*seed(i,4);
+    const r=5.1*Math.sqrt(seed(i,2));
+    const z=m.lower+.3+(h-.3)*seed(i,1);
+    d.dot([center[0]+r*Math.cos(a),center[1]+r*Math.sin(a),z],.64,'powder',{part:'tablet'});
+  }
+  if(t>.025&&t<.168&&d.cut) for(let i=0;i<13;i++){
+    const s=wrap(i/13+t*8);
+    d.dot([center[0]+(seed(i,4)-.5)*8,center[1]+(seed(i,5)-.5)*8,mix(123,m.powderTop,s)],.65,'powder',{part:'tablet'});
+  }
+  return [center[0],center[1],m.powderTop];
+}
+function toolDetail(d,t,m) {
+  platform(d,126,53,8,0,27);
+  d.plate(-1,-22,34,75,5,126,'frame','dark',{edge:true});
+  d.plate(-33,-12,34,9,24,122,'frame','steel',{edge:true});
+  for (const x of [-24,24]) {
+    d.rod([x,-13,40],[x,-13,171],2.9,'frame','chrome',{n:12});
+    d.rod([x,-13,101],[x,-13,115],4,'frame','steel',{n:12});
+  }
+  const rim = [[-31,-22],[0,-22],[30,-22],[34,0],[30,22],[0,22],[-31,22],[-35,0]];
+  holeDeck(d,rim,[0,0],89,DIE_Z,'turret','steel',7.1,true);
+  d.flange([0,0,80],up,3,6.3,9,'turret','steel',cutShell);
+  d.flange([0,0,137],up,3,6.3,9,'turret','steel',cutShell);
+  if(d.cut) {
+    drawPunch(d,[0,0],m,true);
+    drawPunch(d,[0,0],m,false);
+    if(t<.18) {
+      d.plate(-19,-4,114,32,16,7,'feed','steel',{edge:true});
+      d.profile([-23,-4,0],up,[[121,7],[131,8],[150,15],[153,15]],'feed','steel',{...cutShell});
+      d.flange([-23,-4,151],up,2,11,16,'feed','chrome',cutShell);
+    }
+    if(t>=.57&&t<.82) {
+      const rise = clamp((m.lower-34-67)/10);
+      const rail = move(16-32*rise,0,0);
+      d.face([[-22,-8,67],[-16,-8,67],[-16,8,67],[-22,8,67]].map(rail),'cam','brass',{two:true,edge:true});
+      d.face([[-16,-8,67],[16,-8,77],[16,8,77],[-16,8,67]].map(rail),'cam','brass',{two:true,edge:true});
+      d.face([[16,-8,77],[23,-8,77],[23,8,77],[16,8,77]].map(rail),'cam','brass',{two:true,edge:true});
+      d.face([[-22,-8,62],[23,-8,62],[23,-8,77],[16,-8,77],[-16,-8,67],[-22,-8,67]].map(rail),'cam','dark',{two:true,edge:true});
+      if(t<.74) d.arrow([13,2,m.lower-17],[13,2,m.lower+6],energy,{tip:6,width:2});
+    }
+  } else {
+    d.box(-1,15,54,74,2,99,'frame','window',{alpha:.58,edge:true});
+    d.plate(-1,16,149,76,4,5,'frame','dark');
+  }
+  d.outlet([22,0,DIE_Z],[75,0,DIE_Z-23],20,7,'chute','steel');
+  d.face([[10,-8,DIE_Z+.8],[28,-9,DIE_Z+.8],[36,-4,DIE_Z+.8],[10,-4,DIE_Z+.8]],'chute','brass',{edge:true,two:true});
+  const p = d.cut || t>=.74 ? pressProduct(d,t,m,[0,0],true):[0,0,DIE_Z];
+  return {turret:[-23,4,105],feed:[-23,-4,142],upper:[0,0,m.upper+13],lower:[0,0,m.lower-11],cam:[0,-6,m.lower-34],
+    rollers:[-25,-10,148],tablet:p,chute:[42,0,105]};
+}
+function rollerPair(d,t,isMain) {
+  const a=pressAngle(t), u=[Math.cos(a),Math.sin(a),0];
+  const at = (r,z)=>[r*u[0],r*u[1],z];
+  const h=isMain?151:150, low=isMain?56:55;
+  const radius=isMain?11:9;
+  d.plate(71*u[0],71*u[1],50,13,15,h-43,'rollers','dark',{edge:true});
+  for(const z of [h,low]){
+    d.rod(at(43,z),at(62,z),radius,'rollers',isMain?'brass':'steel',{n:20});
+    d.rod(at(42,z),at(67,z),3.2,'rollers','chrome',{n:12});
+  }
+}
+function drawPress(d,t,detail) {
+  const m=pressKinematics(t);
+  if(detail) return toolDetail(d,t,m);
+  platform(d,165,143);
+  panel(d,0,0,7,142,124,32);
+  d.rod([0,0,36],[0,0,169],13,'turret','dark',{n:28});
+  d.rod([0,0,38],[0,0,57],32,'turret','steel',{n:30});
+  d.rod([0,0,144],[0,0,151],32,'turret','dark',{n:28});
+  d.rod([0,0,168],[0,0,177],22,'turret','chrome',{n:28});
+  d.bolts(0,0,177,16,7,'turret');
+  const stations=Array.from({length:STATIONS},(_,i)=>{
+    const phase=wrap(t+i/STATIONS);
+    return {phase, xy:aroundPress(phase,PUNCH_R), a:pressAngle(phase), m: i===0?m:pressKinematics(phase), tracked:i===0};
+  });
+  for(const s of stations) {
+    const ring=(r,a)=>[r*Math.cos(a),r*Math.sin(a)];
+    const a=s.a, k=FULL/STATIONS/2;
+    const outer=[ring(28,a-k),ring(50,a-k),ring(69,a-k),ring(70,a),ring(69,a+k),ring(50,a+k),ring(28,a+k),ring(28,a)];
+    holeDeck(d,outer,s.xy,99,DIE_Z,'turret',s.tracked?'mint':'steel',6.9);
+    for(const z of [80,137]) {
+      const [x,y]=s.xy;
+      d.rod([x,y,z],[x,y,z+4],8,'turret',s.tracked?'mint':'dark',{n:14});
+      const arm=spinZ(a);
+      d.plate(39,0,z,29,11,4,'turret',s.tracked?'mint':'dark',{tx:arm});
+    }
+    drawPunch(d,s.xy,s.m,true);
+    drawPunch(d,s.xy,s.m,false);
+    if(!s.tracked&&s.m.packed&&s.phase>.707&&s.phase<.878){
+      const [x,y,z]=s.m.tablet;
+      d.rod([x,y,z],[x,y,z+5],5.5,'tablet','tablet',{n:12});
+    }
+  }
+  rollerPair(d,.322,false);
+  rollerPair(d,.408,true);
+  for(let i=0;i<10;i++) {
+    const a=.56+i*.022,b=a+.022;
+    const z0=pressKinematics(Math.min(a,.712)).lower-34;
+    const z1=pressKinematics(Math.min(b,.712)).lower-34;
+    const corners=[aroundPress(a,45,z0),aroundPress(a,56,z0),aroundPress(b,56,z1),aroundPress(b,45,z1)];
+    d.face(corners,'cam','brass',{edge:true,two:true});
+    d.face([corners[1],corners[2],aroundPress(b,56,48),aroundPress(a,56,48)],'cam','dark',{two:true,edge:true});
+  }
+  const [sx,sy]=shoeCenter;
+  for(let i=0;i<7;i++) {
+    const a=.013+.022*i,b=a+.022;
+    const outer=(t,z)=>aroundPress(t,64,z), inner=(t,z)=>aroundPress(t,42,z);
+    d.face([inner(a,123),outer(a,123),outer(b,123),inner(b,123)],'feed','dark',{edge:true});
+    d.face([outer(a,112),outer(b,112),outer(b,123),outer(a,123)],'feed','steel',{edge:true});
+  }
+  d.profile([sx,sy,0],up,[[121,7],[137,9],[158,17],[172,17]],'feed','steel',{...cutShell,cap:true});
+  d.flange([sx,sy,169],up,4,12,18,'feed','chrome',cutShell);
+  const from=transferAt(24,DIE_Z), to=transferAt(72,DIE_Z-23);
+  d.outlet(from,to,20,8,'chute','steel');
+  const blade=[transferAt(2,DIE_Z+.5),transferAt(25,DIE_Z+.5),add3(transferAt(28,DIE_Z+.5),[-5,-3,0]),add3(transferAt(4,DIE_Z+.5),[-4,-5,0])];
+  d.face(blade,'chute','brass',{two:true,edge:true});
+  d.line([blade[0],blade[1]],'#ffcf7b',2,{part:'chute',bias:1});
+  const target=pressProduct(d,t,m,stations[0].xy,false);
+  if(d.cut&&t>=.59&&t<.74){
+    const p=add3(stations[0].xy,[0,0,m.lower-18]);
+    d.arrow(p,add3(p,[0,0,24]),energy,{width:2,tip:6,bias:1});
+  }
+  for(const [x,y] of [[-76,-65],[74,-65],[-76,63],[74,63]]) {
+    if(d.cut&&d.near([x/76,y/65,0]))continue;
+    d.plate(x,y,36,5,5,149,'frame','dark',{edge:true});
+  }
+  if(!d.cut) {
+    d.box(0,66,41,148,1.5,138,'frame','window',{alpha:.42,edge:true});
+    d.box(75,0,41,1.5,130,138,'frame','window',{alpha:.38,edge:true});
+    d.plate(0,0,179,155,137,6,'frame','dark',{edge:true});
+  }
+  const [x,y]=stations[0].xy;
+  return {upper:[x,y,m.upper+14],lower:[x,y,m.lower-12],cam:aroundPress(.67,54,72),
+    rollers:aroundPress(.408,60,150),tablet:target,feed:[sx,sy,156],chute:transferAt(39,DIE_Z-6),turret:[x,y,DIE_Z]};
+}
+
+function coaterKinematics(t) {
+  return {
+    turn:FULL*key(t,[[0,0],[.14,.35],[.78,2.2],[.84,2.35],[1,2.8]]),
+    spray:pulse(t,.232,.30,.635,.658),
+    coverage:ramp(t,.26,.68),
+    unload:ramp(t,.842,.995),
+    airflow:pulse(t,.08,.22,.81,.9)
+  };
+}
+function drawCoater(d,t) {
+  const m=coaterKinematics(t), z=97, center=[0,0,z], radius=54;
+  const spin=spinX(m.turn), rotate=p=>add3(center,spin(p));
+  const drumPoint=(x,r,a)=>rotate([x,r*Math.cos(a),r*Math.sin(a)]);
+  platform(d,183,138,-4);
+  if(!d.cut) {
+    panel(d,-15,0,7,151,121,42);
+    d.plate(-10,0,49,132,122,107,'frame','dark',{edge:true});
+    d.plate(-10,0,156,134,124,8,'frame','steel',{edge:true});
+    d.plate(-74,0,63,18,125,84,'frame','steel',{edge:true});
+  } else {
+    d.plate(-54,-45,7,24,22,145,'frame','dark',{edge:true});
+    d.plate(37,-45,7,18,22,145,'frame','steel',{edge:true});
+    d.plate(-10,-46,148,118,16,9,'frame','dark',{edge:true});
+    d.plate(-10,0,7,133,119,19,'air','dark',{edge:true});
+  }
+  d.profile(center,across,[[-60,27],[-50,41],[-44,54],[45,54],[57,39],[59,35]],'drum','steel',{...cutShell,rim:[2,3,5],n:36});
+  d.flange(add3(center,[-45,0,0]),across,4,49,58,'drum','chrome',{...cutShell,n:32});
+  d.flange(add3(center,[43,0,0]),across,4,49,58,'drum','chrome',{...cutShell,n:32});
+  d.flange(add3(center,[56,0,0]),across,3,30,40,'drum','chrome',{n:30});
+  d.flange(add3(center,[-61,0,0]),across,4,18,29,'drum','dark',{n:30});
+  motor(d,[-86,0,z],[-61,0,z],12,'drum');
+  for(let i=0;i<30;i++) {
+    const a=FULL*i/30;
+    const n=spin([0,Math.cos(a),Math.sin(a)]);
+    const front=d.near(n);
+    if(d.cut===front) continue;
+    const r=d.cut?radius-.55:radius+.35;
+    for(let x=-38;x<=39;x+=7) d.dot(drumPoint(x,r,a+(x%2)*.05),.78,d.cut?'dark':'graphite',{part:'drum',bias:.15});
+  }
+  if(d.cut){
+    for(let i=0;i<6;i++){
+      const a=FULL*i/6;
+      const row=(x,r,b)=>drumPoint(x,r,a+b);
+      d.face([row(-39,53,0),row(40,53,.18),row(40,39,.18),row(-39,40,0)],'baffles','brass',{two:true,edge:true});
+      d.face([row(-39,40,0),row(40,39,.18),row(40,40,.24),row(-39,41,.06)],'baffles','chrome',{two:true});
+    }
+    d.rod([-57,9,128],[38,9,128],2.3,'spray','chrome');
+    for(const x of [-25,0,25]){
+      d.rod([x,9,128],[x,9,120],2.9,'spray','steel');
+      d.rod([x,9,120],[x,9,116],4,'spray','blue');
+      if(m.spray>.03) for(let i=0;i<22;i++) {
+        const q=wrap(i/22+t*11);
+        const xx=x+(seed(i,0)-.5)*q*26;
+        const y=9+(seed(i,1)-.43)*q*31;
+        d.dot([xx,y,116-q*51],.58+seed(i,2)*.53,'blue',{part:'spray',alpha:m.spray});
+      }
+    }
+    for(let i=0;i<172;i++){
+      if(seed(i,4)<m.unload)continue;
+      const q=wrap(seed(i,1)+m.turn/FULL*(.9+seed(i,2)*.53));
+      const x=(seed(i,0)-.5)*77;
+      const a=q<.64?mix(-.96,.79,q/.64):mix(.79,-.68,(q-.64)/.36);
+      const r=(q<.64?mix(49,51,q/.64):mix(48,31,Math.sin((q-.64)/.36*Math.PI)))-seed(i,3)*13;
+      const p=[x,r*Math.sin(a),z-r*Math.cos(a)];
+      d.dot(p,1.35+seed(i,6)*.71,seed(i,7)<m.coverage?'film':'tablet',{tablet:true,angle:Math.sin(q*13+i)*74,part:'product'});
+    }
+    if(m.airflow>.08) {
+      airflow(d,[-43,-12,154],[39,-12,154],t*3.3,5);
+      for(const x of [-26,14,38]) airflow(d,[x,-14,145],[x,-10,34],t*3.3,5,air);
+      airflow(d,[-10,2,30],[-89,2,30],t*3.2,5,air);
+    }
+  }
+  d.pipe([[-83,0,151],[-57,0,151],[-57,9,128]],3,'spray','steel');
+  d.profile([0,0,0],up,[[20,36],[25,41],[38,47]],'air','dark',{...cutShell,n:20});
+  d.rod([-95,2,30],[-34,2,30],9,'air','steel',{n:20});
+  d.flange([-96,2,30],across,4,6,12,'air','chrome');
+  d.outlet([55,0,64],[115,0,28],24,8,'chute','steel');
+  if(m.unload>0&&m.unload<1) for(let i=0;i<42;i++) {
+    const q=wrap(t*7.4+i/42);
+    d.dot([mix(44,115,q),(seed(i,8)-.5)*15,mix(67,30,q)+2*Math.sin(q*8)],1.7,'film',{tablet:true,angle:seed(i,3)*145,part:'product'});
+  }
+  return {baffles:drumPoint(7,44,0),drum:[-27,-40,130],product:[13,10,58]};
+}
+
+
+const config = machines[MACHINE];
+const id = name => document.getElementById(name);
+const stage = id('stage');
+const scrub = id('scrub');
+const select = id('part');
+const data = {
+  t: config.start, speed:1, playing:false, cut:true, detail:false, selected:'',
+  azimuth:config.camera[0], elevation:config.camera[1], zoom:1, pauseAt:null
+};
+const parts = new Map(config.parts.map(p=>[p[0],p]));
+const make = (tag, label) => {
+  const e = document.createElement(tag);
+  e.textContent = label;
+  return e;
+};
+const phases = config.phases.map((p,i)=>{
+  const b=make('button',p[2]);
+  b.type='button';
+  b.dataset.phase=String(i);
+  b.addEventListener('click',()=>jump(p[1]));
+  id('phases').append(b);
+  return b;
+});
+for (const [key,name] of config.parts) {
+  const opt=make('option',name);
+  opt.value=key;
+  select.append(opt);
+}
+const legends={
+  granulator:[['#d3a257','Impeller and granules'],['#9688df','Chopper'],['#7bcced','Liquid binder']],
+  dryer:[['#c27a45','Wet granules'],['#e3bf78','Dry granules'],['#7bcced','Process air']],
+  blender:[['#e3bf78','Granules'],['#82ceb2','Other dry ingredients'],['#9688df','Clamps']],
+  press:[['#87cdb6','Tracked die'],['#9688df','Lower punches'],['#d3a257','Cams and rollers']],
+  coater:[['#e9dfbc','Tablet cores'],['#82ceb2','Film-coated tablets'],['#7bcced','Air and spray']]
+};
+for(const [color,label] of legends[MACHINE]){
+  const item=make('span',label);
+  item.className='legend-item';
+  const swatch=make('span','');
+  swatch.className='swatch';
+  swatch.style.setProperty('--swatch',color);
+  item.prepend(swatch);
+  id('legend').append(item);
+}
+
+let currentPhase=-1, currentControl='';
+let projection, projectionKey;
+let raf=0, last=0, lastRender=0, inView=true, dirty=true, pointer=null;
+function getProjection() {
+  const key = [data.azimuth,data.elevation,data.zoom,data.detail].join('/');
+  if(key===projectionKey)return projection;
+  const bounds = data.detail ? config.detailBounds : config.bounds;
+  const corners = [];
+  for(const x of bounds.map(a=>a[0])) for(const y of bounds.map(a=>a[1])) for(const z of bounds.map(a=>a[2])) corners.push([x,y,z]);
+  projection = fitProjection(corners,W,H,{pad:31,headroom:39,azimuth:data.azimuth,elevation:data.elevation});
+  projection.origin = projection.origin.map((x,i)=>mix(i===0?W/2:H/2,x,data.zoom));
+  projection.scale *= data.zoom;
+  projectionKey=key;
+  const path=[];
+  const w = data.detail?78:115, depth=data.detail?38:79;
+  for(let x=-w;x<=w;x+=data.detail?13:15) path.push(pathOf([iso([x,-depth,-9],projection),iso([x,depth,-9],projection)]));
+  for(let y=-depth;y<=depth;y+=data.detail?11:15) path.push(pathOf([iso([-w,y,-9],projection),iso([w,y,-9],projection)]));
+  const [cx,cy]=iso([0,0,-9],projection);
+  const k=cameraOf(projection).k;
+  id('ground').innerHTML=`<ellipse cx="${cx}" cy="${cy}" rx="${w*k*1.17}" ry="${depth*k*.59+16}" fill="url(#shadow)"/><path d="${path.join('')}" fill="none" stroke="#52859c" stroke-opacity=".19" stroke-width="1"/>`;
+  return projection;
+}
+function callout(p, loc, draw) {
+  if(!p||!loc)return '';
+  const [x,y]=draw.place(loc);
+  if(x<10||y<42||x>W-10||y>H-12)return '';
+  const label=p[1];
+  const len = Math.min(222,label.length*7.9+23);
+  const left=x>W*.51;
+  const edge=clamp(x+(left?-len-40:40),16,W-len-16);
+  const yy=clamp(y-35,65,H-24);
+  const leader=pathOf([[x,y],[left?edge+len+10:edge-10,yy],[left?edge+len:edge,yy]]);
+  return `<path d="${leader}" fill="none" stroke="#a5ecd2" stroke-width="1.25"/><circle cx="${x}" cy="${y}" r="3.4" fill="#c0f6de" stroke="#10342c" stroke-width="1"/><rect x="${edge}" y="${yy-12}" width="${len}" height="24" rx="5" fill="#102934" stroke="#63a58f"/><text x="${edge+10}" y="${yy+4.5}" fill="#e4faf2" font-size="13" font-family="Inter,Segoe UI,sans-serif">${label}</text>`;
+}
+function sync() {
+  const phase = config.phases.findLastIndex(p=>data.t>=p[0]);
+  if(phase!==currentPhase) {
+    const p=config.phases[phase];
+    id('phase-title').textContent=p[2];
+    id('phase-description').textContent=p[3];
+    phases.forEach((b,i)=>{
+      if(i===phase)b.setAttribute('aria-current','step');
+      else b.removeAttribute('aria-current');
+    });
+    currentPhase=phase;
+  }
+  const value = Math.round(data.t*1000);
+  if(Number(scrub.value)!==value) scrub.value=String(value);
+  const percent = Math.round(data.t*100);
+  const readout = percent+'%';
+  if (id('percent').value!==readout) id('percent').value=readout;
+  const label = `${readout} · ${config.phases[phase][2]}`;
+  if (scrub.getAttribute('aria-valuetext')!==label) scrub.setAttribute('aria-valuetext',label);
+  const controls = [data.cut,data.detail,data.playing,data.selected].join('/');
+  if(controls===currentControl)return;
+  id('cutaway').setAttribute('aria-pressed',String(data.cut));
+  id('exterior').setAttribute('aria-pressed',String(!data.cut));
+  if(id('detail')){
+    id('detail').setAttribute('aria-pressed',String(data.detail));
+    id('turret').setAttribute('aria-pressed',String(!data.detail));
+  }
+  id('play-label').textContent=data.playing?'Pause':'Play';
+  id('play-icon').textContent=data.playing?'❚❚':'▶';
+  select.value=data.selected;
+  id('part-description').textContent=parts.get(data.selected)?.[2]??'Select a part or click it on the cutaway to highlight it.';
+  currentControl=controls;
+}
+function drawFrame() {
+  const d = makeDraw(getProjection(),data);
+  const anchors = config.draw(d,data.t,data.detail);
+  id('machine').innerHTML=d.render();
+  const p=parts.get(data.selected);
+  id('callout').innerHTML=callout(p,anchors[data.selected]??p?.[3],d);
+  sync();
+}
+function wake() {
+  dirty=true;
+  if(!raf)raf=requestAnimationFrame(frame);
+}
+function frame(now) {
+  raf=0;
+  const advance = data.playing && inView && !document.hidden;
+  if(advance) {
+    if(last) {
+      const delta=Math.min(.12,(now-last)/1000);
+      const next=data.t+delta*data.speed/config.seconds;
+      if(data.pauseAt!==null&&next>=data.pauseAt) {
+        data.t=data.pauseAt;
+        data.pauseAt=null;
+        data.playing=false;
+        dirty=true;
+      } else {
+        data.t=next>=1?wrap(next):next;
+      }
+    }
+    last=now;
+  } else {
+    last=0;
+  }
+  if(dirty || (advance && now-lastRender>=36)) {
+    drawFrame();
+    dirty=false;
+    lastRender=now;
+  }
+  if(data.playing&&inView&&!document.hidden)raf=requestAnimationFrame(frame);
+}
+function jump(t) {
+  data.t=clamp(t);
+  data.playing=false;
+  data.pauseAt=null;
+  last=0;
+  wake();
+}
+function selectPart(key) {
+  data.selected=parts.has(key)?key:'';
+  if (data.detail&&data.selected==='rollers') setDetail(false);
+  wake();
+}
+function setDetail(detail) {
+  if(!config.detailBounds||data.detail===detail)return;
+  data.detail=detail;
+  resetCamera();
+}
+function resetCamera() {
+  [data.azimuth,data.elevation]=data.detail?config.detailCamera:config.camera;
+  data.zoom=1;
+  wake();
+}
+function turn(a,e=0) {
+  data.azimuth=(data.azimuth+a+720)%360;
+  data.elevation=clamp(data.elevation+e,7,61);
+  wake();
+}
+function zoom(factor) {
+  data.zoom=clamp(data.zoom*factor,.78,1.42);
+  wake();
+}
+id('play').addEventListener('click',()=>{
+  data.playing=!data.playing;
+  data.pauseAt=null;
+  if(data.t>=1&&data.playing)data.t=0;
+  last=0;
+  wake();
+});
+id('speed').addEventListener('change',e=>{data.speed=Number(e.target.value)});
+scrub.addEventListener('input',()=>jump(Number(scrub.value)/1000));
+select.addEventListener('change',()=>selectPart(select.value));
+id('cutaway').addEventListener('click',()=>{data.cut=true;wake()});
+id('exterior').addEventListener('click',()=>{data.cut=false;wake()});
+id('left').addEventListener('click',()=>turn(-20));
+id('right').addEventListener('click',()=>turn(20));
+id('zoom-out').addEventListener('click',()=>zoom(1/1.17));
+id('zoom-in').addEventListener('click',()=>zoom(1.17));
+id('reset-view').addEventListener('click',resetCamera);
+id('turret')?.addEventListener('click',()=>setDetail(false));
+id('detail')?.addEventListener('click',()=>setDetail(true));
+id('replay')?.addEventListener('click',()=>{
+  setDetail(true);
+  data.cut=true;
+  data.selected='';
+  data.t=.58;
+  data.playing=true;
+  data.pauseAt=.897;
+  last=0;
+  wake();
+});
+stage.addEventListener('pointerdown',e=>{
+  if(e.button!==0)return;
+  pointer={x:e.clientX,y:e.clientY,id:e.pointerId,part:e.target.closest('[data-part]')?.dataset.part,dragged:false};
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener('pointermove',e=>{
+  if(!pointer||pointer.id!==e.pointerId)return;
+  const dx=e.clientX-pointer.x, dy=e.clientY-pointer.y;
+  if(!pointer.dragged&&Math.abs(dx)+Math.abs(dy)<5)return;
+  pointer.dragged=true;
+  pointer.x=e.clientX;
+  pointer.y=e.clientY;
+  stage.classList.add('dragging');
+  turn(dx*.52,-dy*.31);
+});
+stage.addEventListener('pointerup',e=>{
+  if(!pointer||pointer.id!==e.pointerId)return;
+  if(!pointer.dragged&&pointer.part)selectPart(pointer.part);
+  pointer=null;
+  stage.classList.remove('dragging');
+});
+stage.addEventListener('pointercancel',()=>{pointer=null;stage.classList.remove('dragging')});
+stage.addEventListener('keydown',e=>{
+  const shifts={ArrowLeft:[-10,0],ArrowRight:[10,0],ArrowUp:[0,5],ArrowDown:[0,-5]};
+  if(!shifts[e.key])return;
+  e.preventDefault();
+  turn(...shifts[e.key]);
+});
+document.addEventListener('visibilitychange',()=>{last=0;if(!document.hidden)wake()});
+if('IntersectionObserver' in window) new IntersectionObserver(([entry])=>{
+  inView=entry.isIntersecting;
+  last=0;
+  if(inView&&data.playing)wake();
+}).observe(stage);
+drawFrame();
+</script>
+</body>
+</html>
