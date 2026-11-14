@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tablet Press | Corrected Ejection</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1726;--surface:#142238;--ink:#ecf4fc;--muted:#9cb4cc;--edge:#344c64;--accent:#67d9b8}*{box-sizing:border-box}body{margin:0;background:#0b1320;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:970px;margin:0 auto;padding:clamp(12px,2.5vw,26px)}header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 0 14px}header h1{font-size:clamp(20px,3.4vw,27px);margin:2px 0 0;letter-spacing:-.025em}.eyebrow{color:#86a5bf;text-transform:uppercase;letter-spacing:.16em;font-size:10px;font-weight:800}.stage-name{background:#173b38;border:1px solid #398d7b;color:#c2f9e6;font-size:12px;font-weight:750;padding:8px 12px;border-radius:999px;white-space:nowrap}.stage{background:var(--bg);border:1px solid var(--edge);border-radius:16px;overflow:hidden;position:relative}.stage svg{display:block;width:100%;height:auto;touch-action:pan-y}.stage svg [data-part]{cursor:pointer}.stage svg [data-part].selected{filter:drop-shadow(0 0 5px #57f8d0)}.stage svg .label{fill:#bbd0e5;font-size:13px;font-weight:600}.stage svg .hint{fill:#84a4bd;font-size:10px;font-weight:750;letter-spacing:.12em}.stage svg .leader{stroke:#87a7c3;stroke-dasharray:4 4;fill:none;stroke-width:1.3}#front{pointer-events:none}.phases{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:12px 0}.phases button{font-size:clamp(9px,1.6vw,12px);padding:10px 2px;border-radius:8px;background:#142339;color:#a9c0d3;border:1px solid #304860;cursor:pointer;font-weight:650}.phases button.active{background:#214e48;border-color:#4ad7b3;color:#d8fff3}.transport{display:flex;align-items:center;gap:13px;margin:13px 0}.play{border:0;background:#55d2ad;color:#08342b;font-weight:800;font-size:13px;padding:12px 15px;border-radius:10px;cursor:pointer;min-width:95px}.range{min-width:20px;flex:1;accent-color:#5adfba;cursor:pointer}output{font-variant-numeric:tabular-nums;font-size:13px;min-width:43px;text-align:right;font-weight:750}.tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0}.tools button,.tools select{border:1px solid #41617a;background:#192d45;color:#e4effa;border-radius:9px;padding:9px 12px;font-size:12px;cursor:pointer;font-weight:650}.tools button[aria-pressed=true]{background:#21544e;border-color:#66d9b8;color:#d0ffef}.tools select{margin-left:auto}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:13px 0}.metric{background:#16263c;border:1px solid #334c62;padding:12px;border-radius:11px;min-width:0}.metric small{display:block;color:#9cb6cc;font-size:11px;text-transform:uppercase;letter-spacing:.055em}.metric strong{display:block;margin-top:5px;font-size:clamp(12px,2vw,18px);font-variant-numeric:tabular-nums}.description{background:#132238;border:1px solid #344e67;padding:14px 16px;border-radius:12px;display:flex;gap:12px}.description .counter{background:#23534c;padding:6px 10px;border-radius:7px;font-size:12px;font-weight:800;align-self:start;white-space:nowrap}.description h2{margin:0 0 5px;font-size:16px}.description p{margin:0;color:#afc5d8;font-size:13px;line-height:1.5}.description p#inspect{margin-top:6px;color:#91f0cf}footer{font-size:11px;color:#8faabf;line-height:1.5;margin-top:12px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #7afad6;outline-offset:3px}@media(max-width:480px){main{padding:9px}.metric{padding:8px}.metric small{font-size:9px}.stage-name{font-size:10px;padding:7px 9px}.tools button,.tools select{padding:9px 8px}.description{padding:12px}}
+</style></head><body><main id="press">
+<header><div><div class="eyebrow">Anatomy / mechanical study</div><h1>Tablet press | tooling station</h1></div><span class="stage-name" id="phaseName">01 · Filling</span></header>
+<div class="stage"><svg viewBox="0 0 800 555" xmlns="http://www.w3.org/2000/svg" aria-label="Animated cutaway of tablet press showing filling, compression, lower punch ejection, and tablet take-off" role="img">
+<defs>
+<linearGradient id="chrome"><stop stop-color="#476680"/><stop offset=".22" stop-color="#e5f1f9"/><stop offset=".54" stop-color="#7e9db5"/><stop offset=".8" stop-color="#bfd5e3"/><stop offset="1" stop-color="#3e607b"/></linearGradient>
+<linearGradient id="metal" x2="0.85" y2="1"><stop stop-color="#9db5c9"/><stop offset=".42" stop-color="#64839b"/><stop offset="1" stop-color="#344f67"/></linearGradient>
+<linearGradient id="granules" x2="0" y2="1"><stop stop-color="#f8dda7"/><stop offset="1" stop-color="#b98c56"/></linearGradient>
+<linearGradient id="tabletFill" x2="0" y2="1"><stop stop-color="#effff2"/><stop offset=".36" stop-color="#bcebcf"/><stop offset="1" stop-color="#6cb79e"/></linearGradient>
+<pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" stroke="#27415c" opacity=".4" fill="none"/></pattern>
+<clipPath id="cavityClip"><rect x="418" y="310" width="64" height="121"/></clipPath>
+</defs>
+<rect width="800" height="555" fill="#101d30"/><rect width="800" height="555" fill="url(#grid)"/>
+<rect x="14" y="15" width="772" height="525" rx="10" fill="none" stroke="#334c63"/>
+<text x="30" y="38" class="hint">SINGLE-STATION SECTION · ILLUSTRATIVE MOTION</text>
+<!-- frame -->
+<g data-part="frame" stroke="#233e55" stroke-width="2">
+<rect x="287" y="63" width="25" height="429" rx="5" fill="url(#chrome)"/><rect x="590" y="63" width="25" height="429" rx="5" fill="url(#chrome)"/>
+<rect x="275" y="55" width="353" height="52" rx="9" fill="url(#metal)"/>
+<rect x="298" y="88" width="307" height="15" rx="3" fill="#273d52"/>
+<rect x="264" y="478" width="365" height="30" rx="6" fill="url(#metal)"/>
+<rect x="285" y="507" width="42" height="13" rx="3" fill="#5e7b93"/><rect x="576" y="507" width="42" height="13" rx="3" fill="#5e7b93"/>
+</g>
+<g fill="#c6d8e8" opacity=".8"><circle cx="290" cy="69" r="3"/><circle cx="610" cy="69" r="3"/><circle cx="300" cy="495" r="3"/><circle cx="596" cy="495" r="3"/></g>
+<rect x="390" y="72" width="120" height="22" rx="4" fill="#243e52" stroke="#81a5bd"/><text x="450" y="87" text-anchor="middle" fill="#d4e4f1" font-weight="750" font-size="11">PRESS HEAD</text>
+<g stroke="#26415b" stroke-width="1" fill="none"><path d="M450 95V485" stroke-dasharray="5 7"/></g>
+<!-- die and cavity -->
+<g data-part="die" stroke="#254159" stroke-width="2">
+<rect x="334" y="306" width="232" height="24" rx="4" fill="url(#chrome)"/>
+<path d="M349 329H551V430H349Z" fill="url(#metal)"/>
+<rect x="415" y="307" width="70" height="126" fill="#0b1c2d" stroke="#d9e6ef"/>
+<rect x="419" y="308" width="62" height="122" fill="#1d354a" stroke="none"/>
+<path d="M416 308V429M484 308V429" stroke="#dceaf3" stroke-width="3"/>
+<rect x="334" y="430" width="232" height="29" rx="3" fill="url(#chrome)"/>
+<rect x="358" y="459" width="184" height="17" rx="2" fill="#334e68"/>
+</g>
+<g fill="#bbd1e3" stroke="#2f5870"><circle cx="348" cy="319" r="4"/><circle cx="553" cy="319" r="4"/><circle cx="347" cy="443" r="4"/><circle cx="552" cy="443" r="4"/></g>
+<!-- material behind punches when in cavity -->
+<g id="powderGroup" clip-path="url(#cavityClip)" data-part="tablet"><rect id="powder" x="420" y="334" width="60" height="66" rx="1" fill="url(#granules)"/><path id="powderLines" d="M420 338h60M420 346h60M420 354h60M420 362h60M420 370h60M420 378h60M420 386h60" stroke="#f9ebcf" opacity=".42" stroke-dasharray="3 5" stroke-width="1.7"/></g>
+<!-- upper tooling, its bottom face exactly equals the modeled upper-face position -->
+<g id="upper" data-part="upper">
+<rect x="425" y="-140" width="50" height="109" rx="4" fill="url(#chrome)" stroke="#224057" stroke-width="2"/>
+<rect x="394" y="-93" width="112" height="30" rx="5" fill="url(#metal)" stroke="#18344b" stroke-width="2"/>
+<rect x="406" y="-62" width="88" height="8" rx="2" fill="#2d506a"/>
+<rect x="422" y="-52" width="56" height="45" rx="3" fill="url(#chrome)" stroke="#25435b" stroke-width="2"/>
+<path d="M422-9H478V0H422Z" fill="#e4eff8" stroke="#224159" stroke-width="1.5"/>
+<path d="M426-14H474" stroke="#aec7dc" stroke-width="2"/>
+<g fill="#cde3ef" stroke="#436682"><circle cx="408" cy="-78" r="4"/><circle cx="493" cy="-78" r="4"/></g>
+</g>
+<!-- lower tooling, upper face exactly equals modeled lower-face position -->
+<g id="lower" data-part="lower">
+<rect x="426" y="4" width="48" height="124" rx="3" fill="url(#chrome)" stroke="#254158" stroke-width="2"/>
+<rect x="419" y="0" width="62" height="19" rx="2" fill="url(#chrome)" stroke="#29495e" stroke-width="2"/>
+<path d="M420 0H480" stroke="#edf8ff" stroke-width="4"/>
+<rect x="394" y="101" width="112" height="24" rx="4" fill="url(#metal)" stroke="#183d50" stroke-width="2"/>
+<circle cx="411" cy="113" r="3" fill="#c1d8ea"/><circle cx="488" cy="113" r="3" fill="#c1d8ea"/>
+</g>
+<!-- finished tablet in own layer, moves with lower tool during ejection -->
+<g id="finished" data-part="tablet">
+<rect x="420" y="0" width="60" height="17" rx="4" fill="url(#tabletFill)" stroke="#448e7a" stroke-width="2"/>
+<path d="M426 4H475" stroke="#f8fff9" opacity=".85" stroke-width="2" stroke-linecap="round"/>
+<path d="M427 13H473" stroke="#5b9e8d" stroke-width="1.3" opacity=".55"/>
+</g>
+<!-- front housing is a true removable cover and hides cavity details -->
+<g id="front" data-part="die"><rect x="351" y="332" width="198" height="96" rx="3" fill="url(#metal)" stroke="#b1c9db" stroke-width="2"/><rect x="374" y="355" width="152" height="35" rx="3" fill="#344f68" stroke="#98b4c8"/><text x="450" y="377" text-anchor="middle" fill="#deebf5" font-size="12" font-weight="700">DIE BODY</text><path d="M353 417H547" stroke="#d5e3ef" opacity=".25"/></g>
+<!-- filling feed shoe translates to die and back -->
+<g id="shoe" data-part="feed">
+<path d="M-32-25L-19-53H19L32-25Z" fill="#8caabf" stroke="#d3e2ed" stroke-width="2"/>
+<rect x="-35" y="-25" width="70" height="37" rx="4" fill="#436a88" stroke="#a5c8da" stroke-width="2"/>
+<rect x="-53" y="10" width="106" height="22" rx="4" fill="url(#metal)" stroke="#c7e0ef" stroke-width="2"/>
+<path d="M-46 31H46" stroke="#e7f4fc" stroke-width="4"/>
+<circle cx="0" cy="-8" r="6" fill="#dcb078" stroke="#f5dbad"/>
+</g>
+<!-- takeoff blade only active after ejection -->
+<g id="blade" data-part="blade"><rect x="-116" y="-9" width="112" height="12" rx="3" fill="url(#chrome)" stroke="#28475d" stroke-width="2"/><rect x="-14" y="-11" width="16" height="20" rx="2" fill="#cfdfec" stroke="#274b62" stroke-width="1.5"/><path d="M0-5L8-2V2L0 7Z" fill="#dfeef8" stroke="#395e73"/></g>
+<!-- exit chute and collection bin -->
+<path d="M551 309L695 356L695 368L551 323Z" fill="#47627b" stroke="#afc7d7" stroke-width="2"/>
+<path d="M552 325L693 370" stroke="#243d53" stroke-width="3"/>
+<rect x="665" y="380" width="72" height="49" rx="6" fill="#233b52" stroke="#708ea5" stroke-width="2"/><text x="701" y="402" text-anchor="middle" fill="#c2d6e6" font-size="10" font-weight="700">OUTPUT</text>
+<!-- animated ejection indicator -->
+<g id="liftArrow" stroke="#5cf2bd" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M534 380V330M526 342L534 330L542 342"/><text x="547" y="355" fill="#9af7d8" stroke="none" font-size="13" font-weight="750">LIFT</text></g>
+<!-- labels -->
+<g id="annotations"><path class="leader" d="M481 181L557 174H672"/><text class="label" x="571" y="167">Upper punch</text><path class="leader" d="M419 374L333 389H110"/><text class="label" x="113" y="382">Die cavity</text><path class="leader" d="M481 438L565 449H670"/><text class="label" x="575" y="442">Lower punch</text><path class="leader" d="M236 286L164 278H92"/><text class="label" x="93" y="270">Feed shoe</text></g>
+<text x="30" y="527" class="hint">UPPER PUNCH · DIE · LOWER PUNCH · TAKE-OFF</text>
+</svg></div>
+<div class="phases" id="phases"><button data-time=".10">1. Fill</button><button data-time=".24">2. Meter</button><button data-time=".44">3. Press</button><button data-time=".61">4. Retract</button><button data-time=".73">5. Eject</button><button data-time=".89">6. Remove</button></div>
+<div class="transport"><button class="play" id="play">Pause</button><input class="range" type="range" id="cycle" min="0" max="1000" value="0" aria-label="Cycle progress"><output id="percent">0%</output></div>
+<div class="tools"><button id="ejectReplay">↥ Replay ejection</button><button id="cutaway" aria-pressed="true">Cutaway on</button><button id="labels" aria-pressed="true">Labels on</button><button id="reset">Reset</button><select id="speed" aria-label="Playback speed"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1× speed</option><option value="2">2×</option></select></div>
+<div class="metrics"><div class="metric"><small>Upper punch face</small><strong id="upperMetric">Retracted</strong></div><div class="metric"><small>Lower punch lift</small><strong id="liftMetric">0%</strong></div><div class="metric"><small>Tablet position</small><strong id="tabletMetric">Not formed</strong></div></div>
+<div class="description"><span class="counter" id="stepNum">01 / 06</span><div><h2 id="stepTitle">Filling</h2><p id="stepBody"></p><p id="inspect" aria-live="polite"></p></div></div>
+<footer>Educational single-station schematic. Dimensions, stroke lengths and cycle timings are illustrative. Not a validated CAD, compaction-force or pharmaceutical process model. Use phase buttons or the slider to examine any stage.</footer>
+</main><script>
+(()=>{
+'use strict';
+const root=document.getElementById('press'),q=id=>document.getElementById(id),clamp=x=>Math.min(1,Math.max(0,x)),smooth=x=>{x=clamp(x);return x*x*(3-2*x)},ramp=(t,a,b)=>smooth((t-a)/(b-a)),lerp=(a,b,t)=>a+(b-a)*t;
+const names=['Filling','Metering','Compression','Withdrawal','Ejection','Take-off'];
+const sentences=[
+'Feed shoe moves above the die. The lower punch remains recessed while powder fills the cavity.',
+'The feed shoe withdraws, and the lower punch adjusts the fill volume to a defined level.',
+'The upper punch descends. Both punch faces approach, reducing the powder bed to the final tablet thickness.',
+'The upper punch withdraws while the lower punch supports the finished tablet inside the die.',
+'The lower punch moves UP and carries the finished tablet with it. Its face rises from inside the cavity to the die surface. The tablet is now fully above the die.',
+'Only after ejection, the take-off blade pushes the tablet sideways toward the exit chute. The lower punch then returns to the filling position.'
+];
+const explanations={frame:'Rigid support structure for the illustrated tooling station.',upper:'Upper punch: moves downward during compression, then withdraws before the lower punch ejects the tablet.',lower:'Lower punch: meters the fill, supports compression, and physically lifts the finished tablet until it clears the die.',die:'Die and die cavity: guide both punch faces. During ejection the lower punch face ends level with the top of the die.',feed:'Feed shoe: moves over the cavity for powder filling, then retracts before compression.',tablet:'Powder/tablet: shown as a simplified material band during filling and compaction, then as one rigid finished tablet during ejection.',blade:'Take-off blade: pushes the ejected tablet across the die top toward the discharge chute.'};
+const state={t:0,speed:1,playing:!matchMedia('(prefers-reduced-motion: reduce)').matches,cutaway:true,labels:true,selected:'',pauseAt:null};
+function calculate(t){
+ const stage=t<.18?0:t<.29?1:t<.53?2:t<.65?3:t<.82?4:5;
+ let lowerFace=400,upperFace=180,powderTop=334,shoeX=230;
+ if(t<.18){shoeX=lerp(230,450,ramp(t,.005,.05));powderTop=400-66*ramp(t,.045,.16)}
+ else if(t<.29){lowerFace=lerp(400,388,ramp(t,.18,.255));shoeX=lerp(450,230,ramp(t,.19,.285));powderTop=334}
+ else if(t<.53){const closing=ramp(t,.385,.53);lowerFace=lerp(388,371,closing);upperFace=lerp(180,334,ramp(t,.29,.385))+21*closing;powderTop=lerp(334,355,closing)}
+ else if(t<.65){upperFace=lerp(355,180,ramp(t,.53,.65));lowerFace=371;powderTop=354}
+ else if(t<.82){lowerFace=lerp(371,310,ramp(t,.65,.815));powderTop=lowerFace-17}
+ else {lowerFace=lerp(310,400,ramp(t,.945,1));powderTop=293}
+ const ejected=stage===4 || stage===5;
+ const travel=stage===5?170*ramp(t,.835,.94):0;
+ const slideY=travel>82?(travel-82)*.21:0;
+ const bladeTravel=stage===5?170*ramp(t,.835,.94)*(1-ramp(t,.946,1)):0;
+ const tabletTop=stage===5?293+slideY:lowerFace-17;
+ const fillPct=stage===0?Math.round(ramp(t,.045,.16)*100):100;
+ return {stage,lowerFace,upperFace,powderTop,shoeX,ejected,travel,bladeTravel,tabletTop,fillPct};
+}
+function draw(){
+ const m=calculate(state.t),phase=m.stage;
+ q('upper').setAttribute('transform',`translate(0 ${m.upperFace})`);
+ q('lower').setAttribute('transform',`translate(0 ${m.lowerFace})`);
+ q('shoe').setAttribute('transform',`translate(${m.shoeX} 277)`);
+ q('shoe').style.display=phase<2?'':'none';
+ const hasPowder=state.t>.045&&state.t<.53;
+ q('powderGroup').style.display=hasPowder?'':'none';
+ q('powder').setAttribute('y',m.powderTop);
+ q('powder').setAttribute('height',Math.max(0,m.lowerFace-m.powderTop));
+ q('powderLines').setAttribute('transform',`translate(0 ${m.powderTop-334})`);
+ const hasTablet=state.t>=.53;
+ q('finished').style.display=hasTablet?'':'none';
+ q('finished').setAttribute('transform',`translate(${m.travel} ${m.tabletTop})`);
+ q('blade').style.display=phase===5?'':'none';
+ q('blade').setAttribute('transform',`translate(${418+m.bladeTravel} 298)`);
+ q('liftArrow').style.display=phase===4?'':'none';
+ q('front').style.display=state.cutaway?'none':'';
+ q('annotations').style.display=state.labels?'':'none';
+ q('phaseName').textContent=String(phase+1).padStart(2,'0')+' · '+names[phase];
+ q('stepNum').textContent=String(phase+1).padStart(2,'0')+' / 06';q('stepTitle').textContent=names[phase];q('stepBody').textContent=sentences[phase];
+ q('cycle').value=Math.round(state.t*1000);q('percent').textContent=Math.round(state.t*100)+'%';q('play').textContent=state.playing?'Ⅱ Pause':'▶ Play';
+ q('upperMetric').textContent=phase===2?'Descending':phase===3?'Retracting':'Retracted';
+ q('liftMetric').textContent=phase===4?Math.round(ramp(state.t,.65,.815)*100)+'%':phase===5?'100% → return': '0%';
+ q('tabletMetric').textContent=phase<2?'Not formed':phase===2?'Compacting':phase===3?'In die':phase===4?'Rising ↑':'Out / removed';
+ q('cutaway').textContent=state.cutaway?'Cutaway on':'Cutaway off';q('cutaway').setAttribute('aria-pressed',String(state.cutaway));
+ q('labels').textContent=state.labels?'Labels on':'Labels off';q('labels').setAttribute('aria-pressed',String(state.labels));
+ root.querySelectorAll('[data-part]').forEach(el=>el.classList.toggle('selected',!!state.selected&&el.dataset.part===state.selected));
+ q('inspect').textContent=state.selected?(explanations[state.selected]||''):'';
+ root.querySelectorAll('[data-time]').forEach((b,i)=>{b.classList.toggle('active',i===phase);b.setAttribute('aria-current',String(i===phase))});
+}
+q('play').onclick=()=>{state.playing=!state.playing;state.pauseAt=null;draw()};
+q('cycle').oninput=e=>{state.playing=false;state.pauseAt=null;state.t=+e.target.value/1000;draw()};
+q('speed').onchange=e=>{state.speed=+e.target.value};
+q('cutaway').onclick=()=>{state.cutaway=!state.cutaway;draw()};
+q('labels').onclick=()=>{state.labels=!state.labels;draw()};
+q('ejectReplay').onclick=()=>{state.t=.64;state.playing=true;state.pauseAt=.825;state.cutaway=true;draw()};
+q('reset').onclick=()=>{Object.assign(state,{t:0,playing:false,cutaway:true,labels:true,selected:'',pauseAt:null});draw()};
+root.querySelectorAll('[data-time]').forEach(b=>b.onclick=()=>{state.t=+b.dataset.time;state.playing=false;state.pauseAt=null;draw()});
+root.querySelectorAll('[data-part]').forEach(g=>g.addEventListener('click',e=>{e.stopPropagation();state.selected=g.dataset.part;draw()}));
+root.tabIndex=0;root.addEventListener('keydown',e=>{if(['INPUT','BUTTON','SELECT'].includes(e.target.tagName))return;if(e.code==='Space'){state.playing=!state.playing;state.pauseAt=null;e.preventDefault()}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){state.t=clamp(state.t+(e.key==='ArrowRight'?.01:-.01));state.playing=false;state.pauseAt=null;e.preventDefault()}draw()});
+let prior=null;function frame(now){const dt=prior===null?0:Math.min(.05,(now-prior)/1000);prior=now;if(state.playing&&!document.hidden){state.t+=dt*state.speed/10;if(state.pauseAt!==null&&state.t>=state.pauseAt){state.t=state.pauseAt;state.playing=false;state.pauseAt=null} else if(state.t>=1){state.t%=1} draw()}requestAnimationFrame(frame)};
+window.TABLET_PRESS_TEST={calculate,setPhase(t){state.t=clamp(t);state.playing=false;draw()},getState(){return {...state,...calculate(state.t)}},getGeometry(){return {tablet:q('finished').getAttribute('transform'),lower:q('lower').getAttribute('transform'),upper:q('upper').getAttribute('transform')}}};
+draw();requestAnimationFrame(frame);
+})();
+</script></body></html>
