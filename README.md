@@ -51,3 +51,7 @@ The five standalone HTML pages and the combined local simulator were loaded in C
 These are **educational illustrations**, not validated CAD models, equipment digital twins, production control programs or manufacturing procedures. Process parameters are schematic.
 
 The full upstream Anatomy engine, libraries and audit scripts are in [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy). This repo is an independent adaptation, not an official OpenAI or upstream release.
+
+## GitHub Pages deployment status
+
+The first attempt to enable GitHub Pages automatically on November 14, 2026 failed because the GitHub Actions integration is not allowed to create the Pages site itself. **All source code is committed and publicly accessible**, but the canonical `github.io` website needs one manual owner setting before it is live. See [Pages setup instructions](docs/PUBLISHING.md). Third-party HTML preview links above are provided as a convenience and have not been independently confirmed on every device.
